@@ -65,7 +65,7 @@ module mem_readout_tb1;
     
     wire none;                  // no more items
     wire [44:0] header_stream;
-    wire [44:0] mem_dat_stream;
+    wire [51:0] mem_dat_stream;
     wire valid;                 // 'mem_dat_stream' has valid data
     
 	// Instantiate the Unit Under Test (UUT)

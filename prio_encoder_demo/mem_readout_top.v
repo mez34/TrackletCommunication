@@ -78,7 +78,7 @@ module mem_readout_top(
     input [44:0] mem_dat11,       // contents of this memory
 
     //output [44:0] header_stream,   // headers for sent data 
-    output [44:0] mem_dat_stream, // merged memory data stream
+    output [51:0] mem_dat_stream, // merged memory data stream
     output reg valid,             // valid data in merged memory stream
     output none                   // no more data
 
@@ -184,6 +184,7 @@ header fullheader(
 // connect a mux to merge the data streams
 mem_mux mem_mux(
     .clk(clk),
+    .BX(BX),
     .sel(sel[3:0]),   // binary encoded
     .mem_dat00(mem_dat00),
     .mem_dat01(mem_dat01),
