@@ -90,6 +90,10 @@ wire first_dat;
 wire valid00, valid01, valid02, valid03, valid04, valid05, valid06, valid07, valid08, valid09, valid10, valid11;
 wire [3:0] sel;
 wire [44:0] header_stream;
+// FIFO internal outputs
+//wire ALMOSTEMPTY,ALMOSTFULL,EMPTY,FULL,RDERR,WRERR;
+//wire [51:0] outputdata;
+//wire WRCOUNT,RDCOUNT;
 
 // When 'new_event' is asserted, terminate the current processing and get
 // set up for the new event. This requires that we holdoff on any output
@@ -207,7 +211,37 @@ mem_mux mem_mux(
 // merge the 'valid' bits by 'OR'ing them together. Disable 'valid' during setup.
 always @ (posedge clk) begin
     valid <= !setup & (valid00 | valid01 | valid02 | valid03 | valid04 | valid05 | valid06 | valid07 | valid08 | valid09 | valid10 | valid11);
+    //also use this valid signal for the write enable
 end
 
+/*
+/////////////////////////////////////////////////////////////////////
+// send the mem_dat_stream to a dualclock FIFO
+   FIFO_DUALCLOCK_MACRO  #(
+      .ALMOST_EMPTY_OFFSET(9'h080), // Sets the almost empty threshold
+      .ALMOST_FULL_OFFSET(9'h080),  // Sets almost full threshold
+      .DATA_WIDTH(52),   // Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+      .DEVICE("7SERIES"),  // Target device: "7SERIES" 
+      .FIFO_SIZE ("36Kb"), // Target BRAM: "18Kb" or "36Kb" 
+      .FIRST_WORD_FALL_THROUGH ("FALSE") // Sets the FIFO FWFT to "TRUE" or "FALSE" 
+   ) FIFO_DUALCLOCK_MACRO_inst (
+      //outputs
+      .ALMOSTEMPTY(ALMOSTEMPTY), // 1-bit output almost empty
+      .ALMOSTFULL(ALMOSTFULL),   // 1-bit output almost full
+      .DO(outputdata),           // Output data, width defined by DATA_WIDTH parameter
+      .EMPTY(EMPTY),             // 1-bit output empty
+      .FULL(FULL),               // 1-bit output full
+      .RDCOUNT(RDCOUNT),         // Output read count, width determined by FIFO depth
+      .RDERR(RDERR),             // 1-bit output read error
+      .WRCOUNT(WRCOUNT),         // Output write count, width determined by FIFO depth
+      .WRERR(WRERR),             // 1-bit output write error
+      //inputs
+      .DI(mem_dat_stream),       // Input data, width defined by DATA_WIDTH parameter
+      .RDCLK(clk),               // 1-bit input read clock
+      .RDEN(1'b0),               // 1-bit input read enable
+      .RST(setup),               // 1-bit input reset
+      .WRCLK(clk),               // 1-bit input write clock
+      .WREN(valid)               // 1-bit input write enable
+   );*/
  
 endmodule

@@ -5,6 +5,11 @@ module mem_readout_tb1;
     reg clk;                     // main clock
     //reg reset;                   // synchronously negated active-hi reset
     reg new_event;               // start over
+    reg fifo_rst;                // reset fifo after each new_event
+    reg fifo_rst1;               // hold fifo reset
+    reg fifo_rst2;               // hold fifo reset
+    reg fifo_rst3;               // hold fifo reset
+    reg fifo_rst4;               // hold fifo reset
     reg [2:0] BX;                // store BX
     reg [6:0] clk_cnt;           // counter for # of clock cycles in processing BX
     reg [2:0] BX_pipe;           // if clk_cnt reaches 7'b1, increment BX_pipe
@@ -66,13 +71,18 @@ module mem_readout_tb1;
     wire none;                  // no more items
     wire [44:0] header_stream;
     wire [51:0] mem_dat_stream;
+    wire [51:0] data_output;
     wire valid;                 // 'mem_dat_stream' has valid data
+    
+    // FIFO internal outputs
+    reg FIFO_rd_en;
+    wire FIFO_EMPTY,FIFO_FULL;
     
 	// Instantiate the Unit Under Test (UUT)
 	mem_readout_top uut(
         .clk(clk),                    // main clock
         //.reset(reset),                  // synchronously negated active-hi reset
-        .new_event(new_event),        // start over
+        .new_event(fifo_rst4),        // start over
         .BX(BX),                    // BX number
         .clk_cnt(clk_cnt),          // clock cylces gone by in BX
         .BX_pipe(BX_pipe),
@@ -128,6 +138,7 @@ module mem_readout_tb1;
 		BX = 3'b0;
 		clk_cnt = 7'b0;
 		BX_pipe = 3'b111;
+		FIFO_rd_en = 1'b0;
 		//reset = 0;
 		/*items00 = 6'b000000;
 		items01 = 6'b000001;
@@ -254,7 +265,26 @@ module mem_readout_tb1;
         read_addr09 <= addr09;
         read_addr10 <= addr10;
         read_addr11 <= addr11;
+        fifo_rst1 <= new_event;
+        fifo_rst2 <= fifo_rst1;
+        fifo_rst3 <= fifo_rst2;
+        fifo_rst4 <= fifo_rst3;
+        fifo_rst <= ( new_event || fifo_rst1 || fifo_rst2 || fifo_rst3 || fifo_rst4 );
     end
+
+/////////////////////////////////////////////////////////////////////
+// send the mem_dat_stream to a dualclock FIFO
+fifo_projection_out fifo1(
+    .rst(fifo_rst),                            // 1 bit in data reset
+    .wr_clk(clk),                               // 1 bit in write clock
+    .rd_clk(clk),                               // 1 bit in read clock
+    .din(mem_dat_stream),                       // 52 bit in data into FIFO
+    .wr_en(valid),                              // 1 bit in write enable
+    .rd_en(FIFO_rd_en),                         // 1 bit in read enable
+    .dout(data_output),                         // 52 bit out data out of FIFO
+    .full(FIFO_FULL),                           // 1 bit out FIFO full signal
+    .empty(FIFO_EMPTY)                          // 1 bit out FIFO empty signal
+  );
 
 /*  // Make the memory data match the address every clock period  
     always @ (posedge clk) begin
@@ -275,6 +305,9 @@ module mem_readout_tb1;
                             
     // periodically start a new event
     always @ (posedge clk) begin
+        if (new_event_period[5:0] == 6'd45) begin
+            FIFO_rd_en <= 1'b1;
+        end
         if (new_event_period[5:0] == 6'd50) begin
             new_event <= 1'b1;
             new_event_period <= 6'b0;
