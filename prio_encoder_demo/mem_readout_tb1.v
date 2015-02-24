@@ -5,11 +5,6 @@ module mem_readout_tb1;
     reg clk;                     // main clock
     //reg reset;                   // synchronously negated active-hi reset
     reg new_event;               // start over
-    reg fifo_rst;                // reset fifo after each new_event
-    reg fifo_rst1;               // hold fifo reset
-    reg fifo_rst2;               // hold fifo reset
-    reg fifo_rst3;               // hold fifo reset
-    reg fifo_rst4;               // hold fifo reset
     reg [2:0] BX;                // store BX
     reg [6:0] clk_cnt;           // counter for # of clock cycles in processing BX
     reg [2:0] BX_pipe;           // if clk_cnt reaches 7'b1, increment BX_pipe
@@ -75,7 +70,13 @@ module mem_readout_tb1;
     wire valid;                 // 'mem_dat_stream' has valid data
     
     // FIFO internal outputs
-    reg FIFO_rd_en;
+    reg fifo_rst;                // reset fifo after each new_event
+    reg fifo_rst1;               // hold fifo reset
+    reg fifo_rst2;               // hold fifo reset
+    reg fifo_rst3;               // hold fifo reset
+    reg fifo_rst4;               // hold fifo reset
+    reg FIFO_wr_en;              // FIFO write enable from valid
+    reg FIFO_rd_en;              // FIFO read enable (always valid after reset)
     wire FIFO_EMPTY,FIFO_FULL;
     
 	// Instantiate the Unit Under Test (UUT)
@@ -130,6 +131,13 @@ module mem_readout_tb1;
         .none(none)                 // no more items
     );
 
+    //instantiate the UUT for reading residuals and sending to different memories
+    mem_readin_top uut1(
+        .clk(clk),
+        .new_event(fifo_rst4)
+    );
+    
+    
     reg [5:0] new_event_period;
 
 	initial begin
@@ -140,30 +148,6 @@ module mem_readout_tb1;
 		BX_pipe = 3'b111;
 		FIFO_rd_en = 1'b0;
 		//reset = 0;
-		/*items00 = 6'b000000;
-		items01 = 6'b000001;
-		items02 = 6'b011000;
-		items03 = 6'b000010;
-		items04 = 6'b000000;
-		items05 = 6'b000000;
-		items06 = 6'b000100;
-		items07 = 6'b000000;
-		items08 = 6'b001000;
-		items09 = 6'b000001;
-		items10 = 6'b011000;
-		items11 = 6'b000000;*/
-        /*mem_dat00 = 45'b0;
-		mem_dat01 = 45'b0;
-		mem_dat02 = 45'b0;
-		mem_dat03 = 45'b0;
-		mem_dat04 = 45'b0;
-		mem_dat05 = 45'b0;
-		mem_dat06 = 45'b0;
-		mem_dat07 = 45'b0;
-		mem_dat08 = 45'b0;
-		mem_dat09 = 45'b0;
-		mem_dat10 = 45'b0;
-		mem_dat11 = 45'b0;*/
 		new_event = 1'b0;
   		new_event_period[5:0] = 0;
 
@@ -270,43 +254,29 @@ module mem_readout_tb1;
         fifo_rst3 <= fifo_rst2;
         fifo_rst4 <= fifo_rst3;
         fifo_rst <= ( new_event || fifo_rst1 || fifo_rst2 || fifo_rst3 || fifo_rst4 );
+        FIFO_wr_en <= valid;        //delay on the valid signal because data is off by one clock tick
+        FIFO_rd_en <= !fifo_rst;
     end
 
-/////////////////////////////////////////////////////////////////////
-// send the mem_dat_stream to a dualclock FIFO
-fifo_projection_out fifo1(
-    .rst(fifo_rst),                            // 1 bit in data reset
-    .wr_clk(clk),                               // 1 bit in write clock
-    .rd_clk(clk),                               // 1 bit in read clock
-    .din(mem_dat_stream),                       // 52 bit in data into FIFO
-    .wr_en(valid),                              // 1 bit in write enable
-    .rd_en(FIFO_rd_en),                         // 1 bit in read enable
-    .dout(data_output),                         // 52 bit out data out of FIFO
-    .full(FIFO_FULL),                           // 1 bit out FIFO full signal
-    .empty(FIFO_EMPTY)                          // 1 bit out FIFO empty signal
-  );
+    /////////////////////////////////////////////////////////////////////
+    // send the mem_dat_stream to a dualclock FIFO
+    fifo_projection_out fifo1(
+        .rst(fifo_rst),                             // 1 bit in data reset
+        .wr_clk(clk),                               // 1 bit in write clock
+        .rd_clk(clk),                               // 1 bit in read clock
+        .din(mem_dat_stream),                       // 52 bit in data into FIFO
+        .wr_en(FIFO_wr_en),                         // 1 bit in write enable
+        .rd_en(FIFO_rd_en),                         // 1 bit in read enable
+        .dout(data_output),                         // 52 bit out data out of FIFO
+        .full(FIFO_FULL),                           // 1 bit out FIFO full signal
+        .empty(FIFO_EMPTY)                          // 1 bit out FIFO empty signal
+      );
 
-/*  // Make the memory data match the address every clock period  
-    always @ (posedge clk) begin
-       mem_dat00 <= {4'd00, 2'b0, addr00};
-        mem_dat01 <= {4'd01, 2'b0, addr01};
-        mem_dat02 <= {4'd02, 2'b0, addr02};
-        mem_dat03 <= {4'd03, 2'b0, addr03};
-        mem_dat04 <= {4'd04, 2'b0, addr04};
-        mem_dat05 <= {4'd05, 2'b0, addr05};
-        mem_dat06 <= {4'd06, 2'b0, addr06};
-        mem_dat07 <= {4'd07, 2'b0, addr07};
-        mem_dat08 <= {4'd08, 2'b0, addr08};
-        mem_dat09 <= {4'd09, 2'b0, addr09};
-        mem_dat10 <= {4'd10, 2'b0, addr10};
-        mem_dat11 <= {4'd11, 2'b0, addr11};
-    end*/
-
-                            
+                       
     // periodically start a new event
     always @ (posedge clk) begin
         if (new_event_period[5:0] == 6'd45) begin
-            FIFO_rd_en <= 1'b1;
+            //FIFO_rd_en <= 1'b1;
         end
         if (new_event_period[5:0] == 6'd50) begin
             new_event <= 1'b1;

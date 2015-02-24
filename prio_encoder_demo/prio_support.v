@@ -12,8 +12,7 @@ module prio_support(
     // Outputs:
     output reg [5:0] addr,      // provide low bits to memory
     output reg has_dat,         // item count is not zero
-    output reg valid,           // valid data is coming from memory
-    output reg first_dat        // first item in the memory
+    output reg valid            // valid data is coming from memory
 );
 
 //////////////////////////////////////////////////////////////////////////
@@ -28,11 +27,9 @@ assign count_en = ~setup & not_zero & sel;
 always @ (posedge clk) begin
     if (init) begin                    // at the start of a crossing, load the counter
         item_cntr[5:0] <= initial_count;
-        first_dat <= 1'b1;
     end
     else if (count_en) begin       // if we are selected and we have data, decrement counter  
         item_cntr[5:0] <= item_cntr[5:0] - 1'b000001;
-        first_dat <= 1'b0;
     end
 end
 

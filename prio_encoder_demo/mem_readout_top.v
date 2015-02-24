@@ -86,7 +86,6 @@ module mem_readout_top(
 
 // Internal interconnects
 wire has_dat00, has_dat01, has_dat02, has_dat03, has_dat04, has_dat05, has_dat06, has_dat07, has_dat08, has_dat09, has_dat10, has_dat11;
-wire first_dat;
 wire valid00, valid01, valid02, valid03, valid04, valid05, valid06, valid07, valid08, valid09, valid10, valid11;
 wire [3:0] sel;
 wire [44:0] header_stream;
@@ -108,29 +107,29 @@ assign setup = new_event | new_event_dly1 | new_event_dly2;
 
 // connect address and item counters, as well as comparitors, for each memory
 prio_support prio_support00(.clk(clk), .initial_count(items00), .init(new_event), .sel(sel00), 
-    .setup(setup), .addr(addr00[5:0]), .has_dat(has_dat00), .valid(valid00), .first_dat(first_dat) );
+    .setup(setup), .addr(addr00[5:0]), .has_dat(has_dat00), .valid(valid00));
 prio_support prio_support01(.clk(clk), .initial_count(items01), .init(new_event), .sel(sel01), 
-    .setup(setup), .addr(addr01[5:0]), .has_dat(has_dat01), .valid(valid01), .first_dat(first_dat) );
+    .setup(setup), .addr(addr01[5:0]), .has_dat(has_dat01), .valid(valid01));
 prio_support prio_support02(.clk(clk), .initial_count(items02), .init(new_event), .sel(sel02), 
-    .setup(setup), .addr(addr02[5:0]), .has_dat(has_dat02), .valid(valid02), .first_dat(first_dat) );
+    .setup(setup), .addr(addr02[5:0]), .has_dat(has_dat02), .valid(valid02));
 prio_support prio_support03(.clk(clk), .initial_count(items03), .init(new_event), .sel(sel03), 
-    .setup(setup), .addr(addr03[5:0]), .has_dat(has_dat03), .valid(valid03), .first_dat(first_dat) );
+    .setup(setup), .addr(addr03[5:0]), .has_dat(has_dat03), .valid(valid03));
 prio_support prio_support04(.clk(clk), .initial_count(items04), .init(new_event), .sel(sel04), 
-    .setup(setup), .addr(addr04[5:0]), .has_dat(has_dat04), .valid(valid04), .first_dat(first_dat) );
+    .setup(setup), .addr(addr04[5:0]), .has_dat(has_dat04), .valid(valid04));
 prio_support prio_support05(.clk(clk), .initial_count(items05), .init(new_event), .sel(sel05), 
-    .setup(setup), .addr(addr05[5:0]), .has_dat(has_dat05), .valid(valid05), .first_dat(first_dat) );
+    .setup(setup), .addr(addr05[5:0]), .has_dat(has_dat05), .valid(valid05));
 prio_support prio_support06(.clk(clk), .initial_count(items06), .init(new_event), .sel(sel06), 
-    .setup(setup), .addr(addr06[5:0]), .has_dat(has_dat06), .valid(valid06), .first_dat(first_dat) );
+    .setup(setup), .addr(addr06[5:0]), .has_dat(has_dat06), .valid(valid06));
 prio_support prio_support07(.clk(clk), .initial_count(items07), .init(new_event), .sel(sel07), 
-    .setup(setup), .addr(addr07[5:0]), .has_dat(has_dat07), .valid(valid07), .first_dat(first_dat) );
+    .setup(setup), .addr(addr07[5:0]), .has_dat(has_dat07), .valid(valid07));
 prio_support prio_support08(.clk(clk), .initial_count(items08), .init(new_event), .sel(sel08), 
-    .setup(setup), .addr(addr08[5:0]), .has_dat(has_dat08), .valid(valid08), .first_dat(first_dat) );
+    .setup(setup), .addr(addr08[5:0]), .has_dat(has_dat08), .valid(valid08));
 prio_support prio_support09(.clk(clk), .initial_count(items09), .init(new_event), .sel(sel09), 
-    .setup(setup), .addr(addr09[5:0]), .has_dat(has_dat09), .valid(valid09), .first_dat(first_dat) );
+    .setup(setup), .addr(addr09[5:0]), .has_dat(has_dat09), .valid(valid09));
 prio_support prio_support10(.clk(clk), .initial_count(items10), .init(new_event), .sel(sel10), 
-    .setup(setup), .addr(addr10[5:0]), .has_dat(has_dat10), .valid(valid10), .first_dat(first_dat) );
+    .setup(setup), .addr(addr10[5:0]), .has_dat(has_dat10), .valid(valid10));
 prio_support prio_support11(.clk(clk), .initial_count(items11), .init(new_event), .sel(sel11), 
-    .setup(setup), .addr(addr11[5:0]), .has_dat(has_dat11), .valid(valid11), .first_dat(first_dat) );
+    .setup(setup), .addr(addr11[5:0]), .has_dat(has_dat11), .valid(valid11));
        
  
 //////////////////////////////////////////////////////////////////////////////////
@@ -213,35 +212,5 @@ always @ (posedge clk) begin
     valid <= !setup & (valid00 | valid01 | valid02 | valid03 | valid04 | valid05 | valid06 | valid07 | valid08 | valid09 | valid10 | valid11);
     //also use this valid signal for the write enable
 end
-
-/*
-/////////////////////////////////////////////////////////////////////
-// send the mem_dat_stream to a dualclock FIFO
-   FIFO_DUALCLOCK_MACRO  #(
-      .ALMOST_EMPTY_OFFSET(9'h080), // Sets the almost empty threshold
-      .ALMOST_FULL_OFFSET(9'h080),  // Sets almost full threshold
-      .DATA_WIDTH(52),   // Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
-      .DEVICE("7SERIES"),  // Target device: "7SERIES" 
-      .FIFO_SIZE ("36Kb"), // Target BRAM: "18Kb" or "36Kb" 
-      .FIRST_WORD_FALL_THROUGH ("FALSE") // Sets the FIFO FWFT to "TRUE" or "FALSE" 
-   ) FIFO_DUALCLOCK_MACRO_inst (
-      //outputs
-      .ALMOSTEMPTY(ALMOSTEMPTY), // 1-bit output almost empty
-      .ALMOSTFULL(ALMOSTFULL),   // 1-bit output almost full
-      .DO(outputdata),           // Output data, width defined by DATA_WIDTH parameter
-      .EMPTY(EMPTY),             // 1-bit output empty
-      .FULL(FULL),               // 1-bit output full
-      .RDCOUNT(RDCOUNT),         // Output read count, width determined by FIFO depth
-      .RDERR(RDERR),             // 1-bit output read error
-      .WRCOUNT(WRCOUNT),         // Output write count, width determined by FIFO depth
-      .WRERR(WRERR),             // 1-bit output write error
-      //inputs
-      .DI(mem_dat_stream),       // Input data, width defined by DATA_WIDTH parameter
-      .RDCLK(clk),               // 1-bit input read clock
-      .RDEN(1'b0),               // 1-bit input read enable
-      .RST(setup),               // 1-bit input reset
-      .WRCLK(clk),               // 1-bit input write clock
-      .WREN(valid)               // 1-bit input write enable
-   );*/
  
 endmodule
