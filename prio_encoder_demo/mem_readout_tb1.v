@@ -37,6 +37,8 @@ module mem_readout_tb1;
     
     reg [5:0] nitems_addr;          // counts number of items in the data
     
+    wire [47:0] final_residuals;
+    
     reg [4:0] read_addr00;
     reg [4:0] read_addr01;
     reg [4:0] read_addr02;
@@ -81,9 +83,9 @@ module mem_readout_tb1;
     
 	// Instantiate the Unit Under Test (UUT)
 	mem_readout_top uut(
-        .clk(clk),                    // main clock
-        //.reset(reset),                  // synchronously negated active-hi reset
-        .new_event(fifo_rst4),        // start over
+        .clk(clk),                  // main clock
+        //.reset(reset),              // synchronously negated active-hi reset
+        .new_event(fifo_rst4),      // start over
         .BX(BX),                    // BX number
         .clk_cnt(clk_cnt),          // clock cylces gone by in BX
         .BX_pipe(BX_pipe),
@@ -134,7 +136,8 @@ module mem_readout_tb1;
     //instantiate the UUT for reading residuals and sending to different memories
     mem_readin_top uut1(
         .clk(clk),
-        .new_event(fifo_rst4)
+        .new_event(fifo_rst4),
+        .data_residuals(data_output)
     );
     
     
@@ -179,8 +182,14 @@ module mem_readout_tb1;
     always begin
         #5 clk = ~clk;   // 100 MHz
     end
-        
 
+    //////////////////////////////////////////////////////////////
+    // write out the data from data_stream to memory
+    //memory storeinMem00( .output_data(final_residuals), .clock(clk),
+    //    .write_address(5'b0), .write_enable(1'b1), .read_address(5'b00001), .input_data({data_output[51:49],data_output[44:0]}) );   
+
+    /////////////////////////////////////////////////////////////
+    // read in input data
     memory #(45,5,"/home/user/project_1/testdata0.txt") getMemDat00( .output_data(mem_dat00), .clock(clk),
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr00), .input_data(45'b0) );
     memory #(45,5,"/home/user/project_1/testdata1.txt") getMemDat01( .output_data(mem_dat01), .clock(clk), 

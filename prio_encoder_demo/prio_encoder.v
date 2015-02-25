@@ -61,22 +61,18 @@ end
 // Implement an 8:3 encoder. The final mux that combines the memory streams
 // works better with with an encoded select as compared to individual select signals.
 always @ (posedge clk) begin
-    if (sel00) begin
-        //if (first_dat)
-        //    sel <= 4'b1111;
-        sel <= 4'b0000;
-    end
-    if (sel01) sel <= 4'b0001;
-    if (sel02) sel <= 4'b0010;
-    if (sel03) sel <= 4'b0011;
-    if (sel04) sel <= 4'b0100;
-    if (sel05) sel <= 4'b0101;
-    if (sel06) sel <= 4'b0110;
-    if (sel07) sel <= 4'b0111;
-    if (sel08) sel <= 4'b1000;
-    if (sel09) sel <= 4'b1001;
-    if (sel10) sel <= 4'b1011;
-    if (sel11) sel <= 4'b1100;
+    if (sel00) sel <= 4'b0001;
+    if (sel01) sel <= 4'b0010;
+    if (sel02) sel <= 4'b0011;
+    if (sel03) sel <= 4'b0100;
+    if (sel04) sel <= 4'b0101;
+    if (sel05) sel <= 4'b0110;
+    if (sel06) sel <= 4'b0111;
+    if (sel07) sel <= 4'b1000;
+    if (sel08) sel <= 4'b1001;
+    if (sel09) sel <= 4'b1011;
+    if (sel10) sel <= 4'b1100;
+    if (sel11) sel <= 4'b1101;
 end
            
 endmodule
