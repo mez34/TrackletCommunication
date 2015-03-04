@@ -137,7 +137,8 @@ module mem_readout_tb1;
     mem_readin_top uut1(
         .clk(clk),
         .new_event(fifo_rst4),
-        .data_residuals(data_output)
+        .data_residuals(data_output),
+        .datanull(FIFO_EMPTY)
     );
     
     
