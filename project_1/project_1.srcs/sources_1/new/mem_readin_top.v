@@ -29,6 +29,7 @@ module mem_readin_top(
     reg [4:0] write_addr;
     reg new_event_dly1, new_event_dly2;
     reg [51:0] data_residuals_dly1;
+    reg datanull_dly;
     
     //wr_en (write enables for the 12 memories) & write_addr (write addresses for the 12 memories) & item counter for each memory
     reg wr_en_mem00, wr_en_mem01, wr_en_mem02, wr_en_mem03, wr_en_mem04, wr_en_mem05, wr_en_mem06, wr_en_mem07, wr_en_mem08, wr_en_mem09, wr_en_mem10, wr_en_mem11;
@@ -39,6 +40,7 @@ module mem_readin_top(
         new_event_dly1 <= new_event;
         new_event_dly2 <= new_event_dly1;
         data_residuals_dly1 <= data_residuals;
+        datanull_dly <= datanull;
         $display ("BX: %b",data_residuals[51:49]);
         $display ("SEL: %b",data_residuals[48:45]);
         $display ("data: %h",data_residuals[44:0]);
@@ -89,7 +91,7 @@ module mem_readin_top(
             write_addr10 <= 5'b11111;
             write_addr11 <= 5'b11111;
         end
-        else if (datanull) begin
+        else if (datanull_dly) begin //don't write out anything if reading out EMPTY from FIFO
             wr_en_mem00 <= 1'b0;
             wr_en_mem01 <= 1'b0;
             wr_en_mem02 <= 1'b0;
@@ -106,6 +108,7 @@ module mem_readin_top(
         else begin
             // use the 4 bits containing memory information and set a write enable for the memory it should be sent to
             // also increment the write_addr for that memory so that data does not overwrite itself 
+            // increment num_items for that memory (counter for how many residuals data has
             case (data_residuals[48:45])
                  4'b0001: begin 
                     wr_en_mem00 <= 1'b1;
@@ -260,7 +263,7 @@ module mem_readin_top(
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
                  end
-                 4'b1011: begin
+                 4'b1010: begin
                     wr_en_mem09 <= 1'b1;
                     write_addr09 <= write_addr09 + 1'b1;
                     num_items09 <= num_items09 + 1'b1;
@@ -277,7 +280,7 @@ module mem_readin_top(
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
                  end
-                 4'b1100: begin
+                 4'b1011: begin
                     wr_en_mem10 <= 1'b1;
                     write_addr10 <= write_addr10 + 1'b1;
                     num_items10 <= num_items10 + 1'b1;
@@ -294,7 +297,7 @@ module mem_readin_top(
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
                  end
-                 4'b1101: begin
+                 4'b1100: begin
                     wr_en_mem11 <= 1'b1;
                     write_addr11 <= write_addr11 + 1'b1;
                     num_items11 <= num_items11 + 1'b1;
@@ -324,18 +327,18 @@ module mem_readin_top(
                     num_items09 <= 6'b0;
                     num_items10 <= 6'b0;
                     num_items11 <= 6'b0;
-                    write_addr00 <= 5'b0;
-                    write_addr01 <= 5'b0;
-                    write_addr02 <= 5'b0;
-                    write_addr03 <= 5'b0;
-                    write_addr04 <= 5'b0;
-                    write_addr05 <= 5'b0;
-                    write_addr06 <= 5'b0;
-                    write_addr07 <= 5'b0;
-                    write_addr08 <= 5'b0;
-                    write_addr09 <= 5'b0;
-                    write_addr10 <= 5'b0;
-                    write_addr11 <= 5'b0;
+                    write_addr00 <= 5'b11111;
+                    write_addr01 <= 5'b11111;
+                    write_addr02 <= 5'b11111;
+                    write_addr03 <= 5'b11111;
+                    write_addr04 <= 5'b11111;
+                    write_addr05 <= 5'b11111;
+                    write_addr06 <= 5'b11111;
+                    write_addr07 <= 5'b11111;
+                    write_addr08 <= 5'b11111;
+                    write_addr09 <= 5'b11111;
+                    write_addr10 <= 5'b11111;
+                    write_addr11 <= 5'b11111;
                     wr_en_mem00 <= 1'b0;
                     wr_en_mem01 <= 1'b0;
                     wr_en_mem02 <= 1'b0;

@@ -70,9 +70,9 @@ always @ (posedge clk) begin
     if (sel06) sel <= 4'b0111;
     if (sel07) sel <= 4'b1000;
     if (sel08) sel <= 4'b1001;
-    if (sel09) sel <= 4'b1011;
-    if (sel10) sel <= 4'b1100;
-    if (sel11) sel <= 4'b1101;
+    if (sel09) sel <= 4'b1010;
+    if (sel10) sel <= 4'b1011;
+    if (sel11) sel <= 4'b1100;
 end
            
 endmodule
