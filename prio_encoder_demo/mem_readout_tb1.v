@@ -65,7 +65,7 @@ module mem_readout_tb1;
     wire [5:0] addr10;          // lower part of memory address
     wire [5:0] addr11;          // lower part of memory address
     
-    wire none;                  // no more items
+    wire done;                  // no more items
     wire [44:0] header_stream;
     wire [51:0] mem_dat_stream;
     wire [51:0] data_output;
@@ -81,65 +81,168 @@ module mem_readout_tb1;
     reg FIFO_rd_en;              // FIFO read enable (always valid after reset)
     wire FIFO_EMPTY,FIFO_FULL;
     
+    wire [53:0] output_L1L2_1;
+    wire [53:0] output_L1L2_2;
+    wire [53:0] output_L1L2_3;
+    wire [53:0] output_L1L2_4;
+    wire [53:0] output_L3L4_1;
+    wire [53:0] output_L3L4_2;
+    wire [53:0] output_L3L4_3;
+    wire [53:0] output_L3L4_4;
+    wire [53:0] output_L5L6_1;
+    wire [53:0] output_L5L6_2;
+    wire [53:0] output_L5L6_3;
+    wire [53:0] output_L5L6_4;
+    
 	// Instantiate the Unit Under Test (UUT)
 	mem_readout_top uut(
         .clk(clk),                  // main clock
         //.reset(reset),              // synchronously negated active-hi reset
-        .new_event(fifo_rst4),      // start over
+        .reset(fifo_rst4),      // start over
         .BX(BX),                    // BX number
         .clk_cnt(clk_cnt),          // clock cylces gone by in BX
         .BX_pipe(BX_pipe),
         
-        .items00(items00),          // starting number of items for this memory
-        .items01(items01),          // starting number of items for this memory
-        .items02(items02),          // starting number of items for this memory
-        .items03(items03),          // starting number of items for this memory
-        .items04(items04),          // starting number of items for this memory
-        .items05(items05),          // starting number of items for this memory
-        .items06(items06),          // starting number of items for this memory
-        .items07(items07),          // starting number of items for this memory
-        .items08(items08),          // starting number of items for this memory
-        .items09(items09),          // starting number of items for this memory
-        .items10(items10),          // starting number of items for this memory
-        .items11(items11),          // starting number of items for this memory
+        .number_in1(items00),          // starting number of items for this memory
+        .number_in2(items01),          // starting number of items for this memory
+        .number_in3(items02),          // starting number of items for this memory
+        .number_in4(items03),          // starting number of items for this memory
+        .number_in5(items04),          // starting number of items for this memory
+        .number_in6(items05),          // starting number of items for this memory
+        .number_in7(items06),          // starting number of items for this memory
+        .number_in8(items07),          // starting number of items for this memory
+        .number_in9(items08),          // starting number of items for this memory
+        .number_in10(items09),          // starting number of items for this memory
+        .number_in11(items10),          // starting number of items for this memory
+        .number_in12(items11),          // starting number of items for this memory
 
-        .mem_dat00(mem_dat00),     
-        .mem_dat01(mem_dat01),     
-        .mem_dat02(mem_dat02),     
-        .mem_dat03(mem_dat03),     
-        .mem_dat04(mem_dat04),     
-        .mem_dat05(mem_dat05),     
-        .mem_dat06(mem_dat06),     
-        .mem_dat07(mem_dat07),  
-        .mem_dat08(mem_dat08),
-        .mem_dat09(mem_dat09),
-        .mem_dat10(mem_dat10),
-        .mem_dat11(mem_dat11),   
+        .input_L1L2_1(mem_dat00),     
+        .input_L1L2_2(mem_dat01),     
+        .input_L1L2_3(mem_dat02),     
+        .input_L1L2_4(mem_dat03),     
+        .input_L3L4_1(mem_dat04),     
+        .input_L3L4_2(mem_dat05),     
+        .input_L3L4_3(mem_dat06),     
+        .input_L3L4_4(mem_dat07),  
+        .input_L5L6_1(mem_dat08),
+        .input_L5L6_2(mem_dat09),
+        .input_L5L6_3(mem_dat10),
+        .input_L5L6_4(mem_dat11),   
 
-        .addr00(addr00),          // lower part of memory address
-        .addr01(addr01),          // lower part of memory address
-        .addr02(addr02),          // lower part of memory address
-        .addr03(addr03),          // lower part of memory address
-        .addr04(addr04),          // lower part of memory address
-        .addr05(addr05),          // lower part of memory address
-        .addr06(addr06),          // lower part of memory address
-        .addr07(addr07),          // lower part of memory address
-        .addr08(addr08),          // lower part of memory address
-        .addr09(addr09),          // lower part of memory address
-        .addr10(addr10),          // lower part of memory address
-        .addr11(addr11),          // lower part of memory address
+        .read_add1(addr00),          // lower part of memory address
+        .read_add2(addr01),          // lower part of memory address
+        .read_add3(addr02),          // lower part of memory address
+        .read_add4(addr03),          // lower part of memory address
+        .read_add5(addr04),          // lower part of memory address
+        .read_add6(addr05),          // lower part of memory address
+        .read_add7(addr06),          // lower part of memory address
+        .read_add8(addr07),          // lower part of memory address
+        .read_add9(addr08),          // lower part of memory address
+        .read_add10(addr09),          // lower part of memory address
+        .read_add11(addr10),          // lower part of memory address
+        .read_add12(addr11),          // lower part of memory address
+        
+        .output_L1L2_1(output_L1L2_1), //returning residuals for this memory
+        .output_L1L2_2(output_L1L2_2), //returning residuals for this memory
+        .output_L1L2_3(output_L1L2_3), //returning residuals for this memory
+        .output_L1L2_4(output_L1L2_4), //returning residuals for this memory
+        .output_L3L4_1(output_L3L4_1), //returning residuals for this memory
+        .output_L3L4_2(output_L3L4_2), //returning residuals for this memory
+        .output_L3L4_3(output_L3L4_3), //returning residuals for this memory
+        .output_L3L4_4(output_L3L4_4), //returning residuals for this memory
+        .output_L5L6_1(output_L5L6_1), //returning residuals for this memory        
+        .output_L5L6_2(output_L5L6_2), //returning residuals for this memory  
+        .output_L5L6_3(output_L5L6_3), //returning residuals for this memory  
+        .output_L5L6_4(output_L5L6_4), //returning residuals for this memory  
+        
+        
         .mem_dat_stream(mem_dat_stream),
         .valid(valid),
-        .none(none)                 // no more items
+        .done(done)                 // no more items
     );
 
     //instantiate the UUT for reading residuals and sending to different memories
     mem_readin_top uut1(
         .clk(clk),
-        .new_event(fifo_rst4),
+        .reset(fifo_rst4),
         .data_residuals(data_output),
         .datanull(FIFO_EMPTY)
     );
+    
+    /*module ProjTransceiver(
+       .clk(clk),
+       .reset(new_event),
+       //.en_proc(en_proc),
+       // programming interface
+       // inputs
+        /*input wire io_clk, // programming clock
+        input wire io_sel, // this module has been selected for an I/O operation
+        input wire io_sync, // start the I/O operation
+        input wire [23:0] io_addr, // slave address, memory or register. Top 16 bits already consumed.
+        input wire io_rd_en, // this is a read operation
+        input wire io_wr_en, // this is a write operation
+        input wire [31:0] io_wr_data, // data to write for write operations
+        // outputs
+        output wire [31:0] io_rd_data, // data returned for read operations
+        output wire io_rd_ack, // 'read' data from this module is ready*/
+        //clocks
+        /*.BX(BX),
+        .first_clk(),
+        .not_first_clk(),
+        .start(fifo_rst4),
+        .done(), //output
+        .number_in1(numitems00),
+        .read_add1(addr00),
+        .input_L1L2_1(mem_dat00), //54 long
+        .number_in2(numitems00),
+        .read_add2(addr01),*/
+        /*.input_L1L2_2(),
+        .number_in3(),
+        .read_add3(),
+        .input_L1L2_3(),
+        .number_in4(),
+        .read_add4(),
+        .input_L1L2_4(),
+        .number_in5(),
+        .read_add5(),
+        .input_L3L4_1(),
+        .number_in6(),
+        .read_add6(),
+        .input_L3L4_2(),
+        .number_in7(),
+        .read_add7(),
+        .input_L3L4_3(),
+        .number_in8(),
+        .read_add8(),
+        .input_L3L4_4(),
+        .number_in9(),
+        .read_add9(),
+        .input_L5L6_1(),
+        .number_in10(),
+        .read_add10(),
+        .input_L5L6_2(),
+        .number_in11(),
+        .read_add11(),
+        .input_L5L6_3(),
+        .number_in12(),
+        .read_add12(),
+        .input_L5L6_4(),
+        .output_L1L2_1(), //54 bits
+        .output_L1L2_2(),
+        .output_L1L2_3(),
+        .output_L1L2_4(),
+        .output_L3L4_1(),
+        .output_L3L4_2(),
+        .output_L3L4_3(),
+        .output_L3L4_4(),
+        .output_L5L6_1(),
+        .output_L5L6_2(),
+        .output_L5L6_3(),
+        .output_L5L6_4()*/
+    //);
+    
+    
+    
     
     
     reg [5:0] new_event_period;

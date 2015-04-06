@@ -21,7 +21,7 @@
 
 module mem_readin_top(
     input clk,                      // main clock
-    input new_event,                // start over
+    input reset,                // start over
     input [51:0] data_residuals,    // data out from neighboring sector, from FIFO (would be residuals)
     input datanull                  // when FIFO is empty data is not valid
 );
@@ -37,7 +37,7 @@ module mem_readin_top(
     reg [5:0] num_items00, num_items01, num_items02, num_items03, num_items04, num_items05, num_items06, num_items07, num_items08, num_items09, num_items10, num_items11;
     
     always @ (posedge clk) begin //delay initalization
-        new_event_dly1 <= new_event;
+        new_event_dly1 <= reset;
         new_event_dly2 <= new_event_dly1;
         data_residuals_dly1 <= data_residuals;
         datanull_dly <= datanull;

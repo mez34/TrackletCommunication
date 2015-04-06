@@ -9,7 +9,7 @@
 //
 // The global connections are:
 //  1) (IN) clk - The processing clock responsible for gathering the data
-//  2) (IN) new_event - A signal to start processing the next event. It is
+//  2) (IN) reset - A signal to start processing the next event. It is
 //          a pulse with the duration of a single clock period.
 //  3) (OUT) mem_dat_stream - A single stream of data from the various memories.
 //           The stream is not contiguous; there are gaps
@@ -23,64 +23,78 @@
 
 module mem_readout_top(
     input clk,                    // main clock
-    input new_event,              // start over
-    input [2:0] BX,                // store BX
+    input reset,              // start over
+    input wire [2:0] BX,           // store BX
     input [6:0] clk_cnt,           // counter for # of clock cycles in processing BX
     input [2:0] BX_pipe,           // if clk_cnt reaches 7'b1, increment BX_pipe
  
     // A memory block
-    input [5:0] items00,          // starting number of items for this memory
-    output [5:0] addr00,          // memory address
-    input [44:0] mem_dat00,       // contents of this memory
+    input [5:0] number_in1,          // starting number of items for this memory
+    output [5:0] read_add1,          // memory address
+    input [44:0] input_L1L2_1,       // contents of this memory
     // A memory block
-    input [5:0] items01,          // starting number of items for this memory
-    output [5:0] addr01,          // memory address
-    input [44:0] mem_dat01,       // contents of this memory
+    input [5:0] number_in2,          // starting number of items for this memory
+    output [5:0] read_add2,          // memory address
+    input [44:0] input_L1L2_2,       // contents of this memory
     // A memory block
-    input [5:0] items02,          // starting number of items for this memory
-    output [5:0] addr02,          // memory address
-    input [44:0] mem_dat02,       // contents of this memory
+    input [5:0] number_in3,          // starting number of items for this memory
+    output [5:0] read_add3,          // memory address
+    input [44:0] input_L1L2_3,       // contents of this memory
     // A memory block
-    input [5:0] items03,          // starting number of items for this memory
-    output [5:0] addr03,          // memory address
-    input [44:0] mem_dat03,       // contents of this memory
+    input [5:0] number_in4,          // starting number of items for this memory
+    output [5:0] read_add4,          // memory address
+    input [44:0] input_L1L2_4,       // contents of this memory
     // A memory block
-    input [5:0] items04,          // starting number of items for this memory
-    output [5:0] addr04,          // memory address
-    input [44:0] mem_dat04,       // contents of this memory
+    input [5:0] number_in5,          // starting number of items for this memory
+    output [5:0] read_add5,          // memory address
+    input [44:0] input_L3L4_1,       // contents of this memory
     // A memory block
-    input [5:0] items05,          // starting number of items for this memory
-    output [5:0] addr05,          // memory address
-    input [44:0] mem_dat05,       // contents of this memory
+    input [5:0] number_in6,          // starting number of items for this memory
+    output [5:0] read_add6,          // memory address
+    input [44:0] input_L3L4_2,       // contents of this memory
     // A memory block
-    input [5:0] items06,          // starting number of items for this memory
-    output [5:0] addr06,          // memory address
-    input [44:0] mem_dat06,       // contents of this memory
+    input [5:0] number_in7,          // starting number of items for this memory
+    output [5:0] read_add7,          // memory address
+    input [44:0] input_L3L4_3,       // contents of this memory
     // A memory block
-    input [5:0] items07,          // starting number of items for this memory
-    output [5:0] addr07,          // memory address
-    input [44:0] mem_dat07,       // contents of this memory
+    input [5:0] number_in8,          // starting number of items for this memory
+    output [5:0] read_add8,          // memory address
+    input [44:0] input_L3L4_4,       // contents of this memory
     // A memory block
-    input [5:0] items08,          // starting number of items for this memory
-    output [5:0] addr08,          // memory address
-    input [44:0] mem_dat08,       // contents of this memory
+    input [5:0] number_in9,          // starting number of items for this memory
+    output [5:0] read_add9,          // memory address
+    input [44:0] input_L5L6_1,       // contents of this memory
     // A memory block
-    input [5:0] items09,          // starting number of items for this memory
-    output [5:0] addr09,          // memory address
-    input [44:0] mem_dat09,       // contents of this memory
+    input [5:0] number_in10,          // starting number of items for this memory
+    output [5:0] read_add10,          // memory address
+    input [44:0] input_L5L6_2,       // contents of this memory
     // A memory block
-    input [5:0] items10,          // starting number of items for this memory
-    output [5:0] addr10,          // memory address
-    input [44:0] mem_dat10,       // contents of this memory
+    input [5:0] number_in11,          // starting number of items for this memory
+    output [5:0] read_add11,          // memory address
+    input [44:0] input_L5L6_3,       // contents of this memory
     // A memory block
-    input [5:0] items11,          // starting number of items for this memory
-    output [5:0] addr11,          // memory address
-    input [44:0] mem_dat11,       // contents of this memory
+    input [5:0] number_in12,          // starting number of items for this memory
+    output [5:0] read_add12,          // memory address
+    input [44:0] input_L5L6_4,       // contents of this memory
 
+    output [53:0] output_L1L2_1,
+    output [53:0] output_L1L2_2,
+    output [53:0] output_L1L2_3,
+    output [53:0] output_L1L2_4,
+    output [53:0] output_L3L4_1,
+    output [53:0] output_L3L4_2,
+    output [53:0] output_L3L4_3,
+    output [53:0] output_L3L4_4,
+    output [53:0] output_L5L6_1,
+    output [53:0] output_L5L6_2,
+    output [53:0] output_L5L6_3,
+    output [53:0] output_L5L6_4,
+    
+    
     //output [44:0] header_stream,   // headers for sent data 
     output [51:0] mem_dat_stream, // merged memory data stream
     output reg valid,             // valid data in merged memory stream
-    output none                   // no more data
+    output done                   // no more data
 
 );
 
@@ -89,47 +103,50 @@ wire has_dat00, has_dat01, has_dat02, has_dat03, has_dat04, has_dat05, has_dat06
 wire valid00, valid01, valid02, valid03, valid04, valid05, valid06, valid07, valid08, valid09, valid10, valid11;
 wire [3:0] sel;
 wire [44:0] header_stream;
+
+wire input_data_stream;
+
 // FIFO internal outputs
 //wire ALMOSTEMPTY,ALMOSTFULL,EMPTY,FULL,RDERR,WRERR;
 //wire [51:0] outputdata;
 //wire WRCOUNT,RDCOUNT;
 
-// When 'new_event' is asserted, terminate the current processing and get
+// When 'reset' is asserted, terminate the current processing and get
 // set up for the new event. This requires that we holdoff on any output
 // for several clock periods. 
 reg new_event_dly1, new_event_dly2;
 always @(posedge clk) begin
-    new_event_dly1 <= new_event;
+    new_event_dly1 <= reset;
     new_event_dly2 <= new_event_dly1;
 end
 // Use these clock periods to prepare to process the new event
-assign setup = new_event | new_event_dly1 | new_event_dly2;
+assign setup = reset | new_event_dly1 | new_event_dly2;
 
 // connect address and item counters, as well as comparitors, for each memory
-prio_support prio_support00(.clk(clk), .initial_count(items00), .init(new_event), .sel(sel00), 
-    .setup(setup), .addr(addr00[5:0]), .has_dat(has_dat00), .valid(valid00));
-prio_support prio_support01(.clk(clk), .initial_count(items01), .init(new_event), .sel(sel01), 
-    .setup(setup), .addr(addr01[5:0]), .has_dat(has_dat01), .valid(valid01));
-prio_support prio_support02(.clk(clk), .initial_count(items02), .init(new_event), .sel(sel02), 
-    .setup(setup), .addr(addr02[5:0]), .has_dat(has_dat02), .valid(valid02));
-prio_support prio_support03(.clk(clk), .initial_count(items03), .init(new_event), .sel(sel03), 
-    .setup(setup), .addr(addr03[5:0]), .has_dat(has_dat03), .valid(valid03));
-prio_support prio_support04(.clk(clk), .initial_count(items04), .init(new_event), .sel(sel04), 
-    .setup(setup), .addr(addr04[5:0]), .has_dat(has_dat04), .valid(valid04));
-prio_support prio_support05(.clk(clk), .initial_count(items05), .init(new_event), .sel(sel05), 
-    .setup(setup), .addr(addr05[5:0]), .has_dat(has_dat05), .valid(valid05));
-prio_support prio_support06(.clk(clk), .initial_count(items06), .init(new_event), .sel(sel06), 
-    .setup(setup), .addr(addr06[5:0]), .has_dat(has_dat06), .valid(valid06));
-prio_support prio_support07(.clk(clk), .initial_count(items07), .init(new_event), .sel(sel07), 
-    .setup(setup), .addr(addr07[5:0]), .has_dat(has_dat07), .valid(valid07));
-prio_support prio_support08(.clk(clk), .initial_count(items08), .init(new_event), .sel(sel08), 
-    .setup(setup), .addr(addr08[5:0]), .has_dat(has_dat08), .valid(valid08));
-prio_support prio_support09(.clk(clk), .initial_count(items09), .init(new_event), .sel(sel09), 
-    .setup(setup), .addr(addr09[5:0]), .has_dat(has_dat09), .valid(valid09));
-prio_support prio_support10(.clk(clk), .initial_count(items10), .init(new_event), .sel(sel10), 
-    .setup(setup), .addr(addr10[5:0]), .has_dat(has_dat10), .valid(valid10));
-prio_support prio_support11(.clk(clk), .initial_count(items11), .init(new_event), .sel(sel11), 
-    .setup(setup), .addr(addr11[5:0]), .has_dat(has_dat11), .valid(valid11));
+prio_support prio_support00(.clk(clk), .initial_count(number_in1), .init(reset), .sel(sel00), 
+    .setup(setup), .addr(read_add1[5:0]), .has_dat(has_dat00), .valid(valid00));
+prio_support prio_support01(.clk(clk), .initial_count(number_in2), .init(reset), .sel(sel01), 
+    .setup(setup), .addr(read_add2[5:0]), .has_dat(has_dat01), .valid(valid01));
+prio_support prio_support02(.clk(clk), .initial_count(number_in3), .init(reset), .sel(sel02), 
+    .setup(setup), .addr(read_add3[5:0]), .has_dat(has_dat02), .valid(valid02));
+prio_support prio_support03(.clk(clk), .initial_count(number_in4), .init(reset), .sel(sel03), 
+    .setup(setup), .addr(read_add4[5:0]), .has_dat(has_dat03), .valid(valid03));
+prio_support prio_support04(.clk(clk), .initial_count(number_in5), .init(reset), .sel(sel04), 
+    .setup(setup), .addr(read_add5[5:0]), .has_dat(has_dat04), .valid(valid04));
+prio_support prio_support05(.clk(clk), .initial_count(number_in6), .init(reset), .sel(sel05), 
+    .setup(setup), .addr(read_add6[5:0]), .has_dat(has_dat05), .valid(valid05));
+prio_support prio_support06(.clk(clk), .initial_count(number_in7), .init(reset), .sel(sel06), 
+    .setup(setup), .addr(read_add7[5:0]), .has_dat(has_dat06), .valid(valid06));
+prio_support prio_support07(.clk(clk), .initial_count(number_in8), .init(reset), .sel(sel07), 
+    .setup(setup), .addr(read_add8[5:0]), .has_dat(has_dat07), .valid(valid07));
+prio_support prio_support08(.clk(clk), .initial_count(number_in9), .init(reset), .sel(sel08), 
+    .setup(setup), .addr(read_add9[5:0]), .has_dat(has_dat08), .valid(valid08));
+prio_support prio_support09(.clk(clk), .initial_count(number_in10), .init(reset), .sel(sel09), 
+    .setup(setup), .addr(read_add10[5:0]), .has_dat(has_dat09), .valid(valid09));
+prio_support prio_support10(.clk(clk), .initial_count(number_in11), .init(reset), .sel(sel10), 
+    .setup(setup), .addr(read_add11[5:0]), .has_dat(has_dat10), .valid(valid10));
+prio_support prio_support11(.clk(clk), .initial_count(number_in12), .init(reset), .sel(sel11), 
+    .setup(setup), .addr(read_add12[5:0]), .has_dat(has_dat11), .valid(valid11));
        
  
 //////////////////////////////////////////////////////////////////////////////////
@@ -164,20 +181,20 @@ prio_encoder prio_encoder (
     .sel10(sel10),
     .sel11(sel11),
     .sel(sel[3:0]),   // binary encoded
-    .none(none)       // no more data
+    .done(done)       // no more data
 );
 //////////////////////////////////////////////////////////////////////////////////
 // write the header for the datastream
 header fullheader(
     .clk(clk),
-    .new_event(new_event),
+    .new_event(reset),
     .BX(BX),
     .clk_cnt(clk_cnt),
     .BX_pipe(BX_pipe),
-    .addr(addr00),
+    .addr(read_add1),
     .has_data(has_dat00),
     .sel(sel[3:0]),
-    .num(items00),
+    .num(number_in1),
     //output header into datastream
     .header_stream(header_stream)
 );
@@ -189,18 +206,18 @@ mem_mux mem_mux(
     .clk(clk),
     .BX(BX),
     .sel(sel[3:0]),   // binary encoded
-    .mem_dat00(mem_dat00),
-    .mem_dat01(mem_dat01),
-    .mem_dat02(mem_dat02),
-    .mem_dat03(mem_dat03),
-    .mem_dat04(mem_dat04),
-    .mem_dat05(mem_dat05),
-    .mem_dat06(mem_dat06),
-    .mem_dat07(mem_dat07),
-    .mem_dat08(mem_dat08),
-    .mem_dat09(mem_dat09),
-    .mem_dat10(mem_dat10),
-    .mem_dat11(mem_dat11),
+    .mem_dat00(input_L1L2_1),
+    .mem_dat01(input_L1L2_2),
+    .mem_dat02(input_L1L2_3),
+    .mem_dat03(input_L1L2_4),
+    .mem_dat04(input_L3L4_1),
+    .mem_dat05(input_L3L4_2),
+    .mem_dat06(input_L3L4_3),
+    .mem_dat07(input_L3L4_4),
+    .mem_dat08(input_L5L6_1),
+    .mem_dat09(input_L5L6_2),
+    .mem_dat10(input_L5L6_3),
+    .mem_dat11(input_L5L6_4),
 //    .header_stream(header_stream),
     
     .mem_dat_stream(mem_dat_stream)
@@ -212,5 +229,15 @@ always @ (posedge clk) begin
     valid <= !setup & (valid00 | valid01 | valid02 | valid03 | valid04 | valid05 | valid06 | valid07 | valid08 | valid09 | valid10 | valid11);
     //also use this valid signal for the write enable
 end
+ 
+/*mem_readin_top disperse(
+    .clk(clk),
+    .reset(fifo_rst4),
+    .data_residuals(input_data_stream),
+    .datanull(FIFO_EMPTY)
+);*/
+ 
+ 
+ 
  
 endmodule
