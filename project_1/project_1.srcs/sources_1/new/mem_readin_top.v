@@ -371,7 +371,7 @@ module mem_readin_top(
         end
     end
 
-    /*always @ (posedge clk) begin
+    always @ (posedge clk) begin
         if (wr_en_mem00) output_L1L2_1 <= data_residuals_dly1[53:0];
         if (wr_en_mem01) output_L1L2_2 <= data_residuals_dly1;
         if (wr_en_mem02) output_L1L2_3 <= data_residuals_dly1;
@@ -384,7 +384,7 @@ module mem_readin_top(
         if (wr_en_mem09) output_L5L6_2 <= data_residuals_dly1;
         if (wr_en_mem10) output_L5L6_3 <= data_residuals_dly1;
         if (wr_en_mem11) output_L5L6_4 <= data_residuals_dly1;
-    end*/
+    end
 
 
     //////////////////////////////////////////////////////////////

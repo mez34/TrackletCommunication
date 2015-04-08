@@ -272,7 +272,7 @@ always @(posedge clk) begin
     test_hold9 <= test_hold8;
 end
 
-assign output_L1L2_1 = test_hold9 + 1;
+/*assign output_L1L2_1 = test_hold9 + 1;
 assign output_L1L2_2 = test_hold9 + 2;
 assign output_L1L2_3 = test_hold9 + 3;
 assign output_L1L2_4 = test_hold9 + 4;
@@ -283,7 +283,7 @@ assign output_L3L4_4 = test_hold9 + 8;
 assign output_L5L6_1 = test_hold9 + 9;
 assign output_L5L6_2 = test_hold9 + 10;
 assign output_L5L6_3 = test_hold9 + 11;
-assign output_L5L6_4 = test_hold9 + 12;
+assign output_L5L6_4 = test_hold9 + 12;*/
 
 
 endmodule
