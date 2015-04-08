@@ -18,7 +18,6 @@ module mem_mux(
     input [44:0] mem_dat09,
     input [44:0] mem_dat10,
     input [44:0] mem_dat11,
-    //input [44:0] header_stream,
     
     output reg [53:0] mem_dat_stream                     
 );

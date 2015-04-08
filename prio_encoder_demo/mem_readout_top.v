@@ -102,7 +102,7 @@ module mem_readout_top(
 wire has_dat00, has_dat01, has_dat02, has_dat03, has_dat04, has_dat05, has_dat06, has_dat07, has_dat08, has_dat09, has_dat10, has_dat11;
 wire valid00, valid01, valid02, valid03, valid04, valid05, valid06, valid07, valid08, valid09, valid10, valid11;
 wire [3:0] sel;
-wire [44:0] header_stream;
+//wire [44:0] header_stream;
 
 
 // When 'reset' is asserted, terminate the current processing and get
@@ -179,7 +179,7 @@ prio_encoder prio_encoder (
 );
 //////////////////////////////////////////////////////////////////////////////////
 // write the header for the datastream
-header fullheader(
+/*header fullheader(
     .clk(clk),
     .new_event(reset),
     .BX(BX),
@@ -191,7 +191,7 @@ header fullheader(
     .num(number_in1),
     //output header into datastream
     .header_stream(header_stream)
-);
+);*/
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -200,18 +200,18 @@ mem_mux mem_mux(
     .clk(clk),
     .BX(BX),
     .sel(sel[3:0]),   // binary encoded
-    .mem_dat00(input_L1L2_1),
-    .mem_dat01(input_L1L2_2),
-    .mem_dat02(input_L1L2_3),
-    .mem_dat03(input_L1L2_4),
-    .mem_dat04(input_L3L4_1),
-    .mem_dat05(input_L3L4_2),
-    .mem_dat06(input_L3L4_3),
-    .mem_dat07(input_L3L4_4),
-    .mem_dat08(input_L5L6_1),
-    .mem_dat09(input_L5L6_2),
-    .mem_dat10(input_L5L6_3),
-    .mem_dat11(input_L5L6_4),
+    .mem_dat00(input_L1L2_1[44:0]),
+    .mem_dat01(input_L1L2_2[44:0]),
+    .mem_dat02(input_L1L2_3[44:0]),
+    .mem_dat03(input_L1L2_4[44:0]),
+    .mem_dat04(input_L3L4_1[44:0]),
+    .mem_dat05(input_L3L4_2[44:0]),
+    .mem_dat06(input_L3L4_3[44:0]),
+    .mem_dat07(input_L3L4_4[44:0]),
+    .mem_dat08(input_L5L6_1[44:0]),
+    .mem_dat09(input_L5L6_2[44:0]),
+    .mem_dat10(input_L5L6_3[44:0]),
+    .mem_dat11(input_L5L6_4[44:0]),
 //    .header_stream(header_stream),
     
     .mem_dat_stream(mem_dat_stream)

@@ -8,6 +8,7 @@ module mem_readout_tb1;
     reg [2:0] BX;                // store BX
     reg [6:0] clk_cnt;           // counter for # of clock cycles in processing BX
     reg [2:0] BX_pipe;           // if clk_cnt reaches 7'b1, increment BX_pipe
+    reg start;
     
     wire [5:0] items00;          // starting number of items for this memory
     wire [5:0] items01;          // starting number of items for this memory
@@ -94,6 +95,91 @@ module mem_readout_tb1;
     wire [53:0] output_L5L6_3;
     wire [53:0] output_L5L6_4;
     
+    wire finished;                  //whole communication process is finished
+
+    //Instantiate the Unit Under Test
+    /*ProjTransceiver comm_int(
+        .clk(clk),                  // main clock
+        //.reset(reset),              // synchronously negated active-hi reset
+        .reset(new_event),      // start over
+        .BX(BX),                    // BX number
+        //.clk_cnt(clk_cnt),          // clock cylces gone by in BX
+        //.BX_pipe(BX_pipe),
+        
+        .start(start),
+        .done(finished),
+        
+        .number_in1(items00),          // starting number of items for this memory
+        .number_in2(items01),          // starting number of items for this memory
+        .number_in3(items02),          // starting number of items for this memory
+        .number_in4(items03),          // starting number of items for this memory
+        .number_in5(items04),          // starting number of items for this memory
+        .number_in6(items05),          // starting number of items for this memory
+        .number_in7(items06),          // starting number of items for this memory
+        .number_in8(items07),          // starting number of items for this memory
+        .number_in9(items08),          // starting number of items for this memory
+        .number_in10(items09),          // starting number of items for this memory
+        .number_in11(items10),          // starting number of items for this memory
+        .number_in12(items11),          // starting number of items for this memory
+    
+        .input_L1L2_1({9'b1,mem_dat00}),     
+        .input_L1L2_2({9'b1,mem_dat01}),     
+        .input_L1L2_3({9'b1,mem_dat02}),     
+        .input_L1L2_4({9'b1,mem_dat03}),     
+        .input_L3L4_1({9'b1,mem_dat04}),     
+        .input_L3L4_2({9'b1,mem_dat05}),     
+        .input_L3L4_3({9'b1,mem_dat06}),     
+        .input_L3L4_4({9'b1,mem_dat07}),  
+        .input_L5L6_1({9'b1,mem_dat08}),
+        .input_L5L6_2({9'b1,mem_dat09}),
+        .input_L5L6_3({9'b1,mem_dat10}),
+        .input_L5L6_4({9'b1,mem_dat11}),   
+    
+        .read_add1(addr00),          // lower part of memory address
+        .read_add2(addr01),          // lower part of memory address
+        .read_add3(addr02),          // lower part of memory address
+        .read_add4(addr03),          // lower part of memory address
+        .read_add5(addr04),          // lower part of memory address
+        .read_add6(addr05),          // lower part of memory address
+        .read_add7(addr06),          // lower part of memory address
+        .read_add8(addr07),          // lower part of memory address
+        .read_add9(addr08),          // lower part of memory address
+        .read_add10(addr09),          // lower part of memory address
+        .read_add11(addr10),          // lower part of memory address
+        .read_add12(addr11),          // lower part of memory address
+        
+        .output_L1L2_1(output_L1L2_1), //returning residuals for this memory
+        .output_L1L2_2(output_L1L2_2), //returning residuals for this memory
+        .output_L1L2_3(output_L1L2_3), //returning residuals for this memory
+        .output_L1L2_4(output_L1L2_4), //returning residuals for this memory
+        .output_L3L4_1(output_L3L4_1), //returning residuals for this memory
+        .output_L3L4_2(output_L3L4_2), //returning residuals for this memory
+        .output_L3L4_3(output_L3L4_3), //returning residuals for this memory
+        .output_L3L4_4(output_L3L4_4), //returning residuals for this memory
+        .output_L5L6_1(output_L5L6_1), //returning residuals for this memory        
+        .output_L5L6_2(output_L5L6_2), //returning residuals for this memory  
+        .output_L5L6_3(output_L5L6_3), //returning residuals for this memory  
+        .output_L5L6_4(output_L5L6_4) //returning residuals for this memory 
+    
+    );*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 	// Instantiate the Unit Under Test (UUT)
 	mem_readout_top uut(
         .clk(clk),                  // main clock
@@ -169,82 +255,6 @@ module mem_readout_tb1;
         .datanull(FIFO_EMPTY)
     );
     
-    /*module ProjTransceiver(
-       .clk(clk),
-       .reset(new_event),
-       //.en_proc(en_proc),
-       // programming interface
-       // inputs
-        /*input wire io_clk, // programming clock
-        input wire io_sel, // this module has been selected for an I/O operation
-        input wire io_sync, // start the I/O operation
-        input wire [23:0] io_addr, // slave address, memory or register. Top 16 bits already consumed.
-        input wire io_rd_en, // this is a read operation
-        input wire io_wr_en, // this is a write operation
-        input wire [31:0] io_wr_data, // data to write for write operations
-        // outputs
-        output wire [31:0] io_rd_data, // data returned for read operations
-        output wire io_rd_ack, // 'read' data from this module is ready*/
-        //clocks
-        /*.BX(BX),
-        .first_clk(),
-        .not_first_clk(),
-        .start(fifo_rst4),
-        .done(), //output
-        .number_in1(numitems00),
-        .read_add1(addr00),
-        .input_L1L2_1(mem_dat00), //54 long
-        .number_in2(numitems00),
-        .read_add2(addr01),*/
-        /*.input_L1L2_2(),
-        .number_in3(),
-        .read_add3(),
-        .input_L1L2_3(),
-        .number_in4(),
-        .read_add4(),
-        .input_L1L2_4(),
-        .number_in5(),
-        .read_add5(),
-        .input_L3L4_1(),
-        .number_in6(),
-        .read_add6(),
-        .input_L3L4_2(),
-        .number_in7(),
-        .read_add7(),
-        .input_L3L4_3(),
-        .number_in8(),
-        .read_add8(),
-        .input_L3L4_4(),
-        .number_in9(),
-        .read_add9(),
-        .input_L5L6_1(),
-        .number_in10(),
-        .read_add10(),
-        .input_L5L6_2(),
-        .number_in11(),
-        .read_add11(),
-        .input_L5L6_3(),
-        .number_in12(),
-        .read_add12(),
-        .input_L5L6_4(),
-        .output_L1L2_1(), //54 bits
-        .output_L1L2_2(),
-        .output_L1L2_3(),
-        .output_L1L2_4(),
-        .output_L3L4_1(),
-        .output_L3L4_2(),
-        .output_L3L4_3(),
-        .output_L3L4_4(),
-        .output_L5L6_1(),
-        .output_L5L6_2(),
-        .output_L5L6_3(),
-        .output_L5L6_4()*/
-    //);
-    
-    
-    
-    
-    
     reg [5:0] new_event_period;
 
 	initial begin
@@ -257,6 +267,7 @@ module mem_readout_tb1;
 		//reset = 0;
 		new_event = 1'b0;
   		new_event_period[5:0] = 0;
+  		start = 1'b1;
 
         //lowest address to read data
         read_addr00 = 4'h0000;
