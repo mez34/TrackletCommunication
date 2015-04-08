@@ -23,12 +23,26 @@ module mem_readin_top(
     input clk,                      // main clock
     input reset,                // start over
     input [53:0] data_residuals,    // data out from neighboring sector, from FIFO (would be residuals)
-    input datanull                  // when FIFO is empty data is not valid
+    input datanull,                  // when FIFO is empty data is not valid
+    
+    output reg [53:0] output_L1L2_1,
+    output reg [53:0] output_L1L2_2,
+    output reg [53:0] output_L1L2_3,
+    output reg [53:0] output_L1L2_4,
+    output reg [53:0] output_L3L4_1,
+    output reg [53:0] output_L3L4_2,
+    output reg [53:0] output_L3L4_3,
+    output reg [53:0] output_L3L4_4,
+    output reg [53:0] output_L5L6_1,
+    output reg [53:0] output_L5L6_2,
+    output reg [53:0] output_L5L6_3,
+    output reg [53:0] output_L5L6_4
+
 );
     reg [3:0] memory_addr;
     reg [4:0] write_addr;
     reg new_event_dly1, new_event_dly2;
-    reg [51:0] data_residuals_dly1;
+    reg [53:0] data_residuals_dly1;
     reg datanull_dly;
     
     //wr_en (write enables for the 12 memories) & write_addr (write addresses for the 12 memories) & item counter for each memory
@@ -41,11 +55,11 @@ module mem_readin_top(
         new_event_dly2 <= new_event_dly1;
         data_residuals_dly1 <= data_residuals;
         datanull_dly <= datanull;
-        $display ("BX: %b",data_residuals[51:49]);
-        $display ("SEL: %b",data_residuals[48:45]);
-        $display ("data: %h",data_residuals[44:0]);
-        $display ("wr_en_mem00: %b",wr_en_mem00);
-        $display ("write_addr00: %b",write_addr00);
+        //$display ("BX: %b",data_residuals[51:49]);
+        //$display ("SEL: %b",data_residuals[48:45]);
+        //$display ("data: %h",data_residuals[44:0]);
+        //$display ("wr_en_mem00: %b",wr_en_mem00);
+        //$display ("write_addr00: %b",write_addr00);
     end
     
         
@@ -111,6 +125,7 @@ module mem_readin_top(
             // increment num_items for that memory (counter for how many residuals data has
             case (data_residuals[48:45])
                  4'b0001: begin 
+                    //output_L1L2_1 <= data_residuals_dly1[53:0];
                     wr_en_mem00 <= 1'b1;
                     write_addr00 <= write_addr00 + 1'b1;
                     num_items00 <= num_items00 + 1'b1;
@@ -355,6 +370,22 @@ module mem_readin_top(
             endcase
         end
     end
+
+    /*always @ (posedge clk) begin
+        if (wr_en_mem00) output_L1L2_1 <= data_residuals_dly1[53:0];
+        if (wr_en_mem01) output_L1L2_2 <= data_residuals_dly1;
+        if (wr_en_mem02) output_L1L2_3 <= data_residuals_dly1;
+        if (wr_en_mem03) output_L1L2_4 <= data_residuals_dly1;
+        if (wr_en_mem04) output_L3L4_1 <= data_residuals_dly1;
+        if (wr_en_mem05) output_L3L4_2 <= data_residuals_dly1;
+        if (wr_en_mem06) output_L3L4_3 <= data_residuals_dly1;
+        if (wr_en_mem07) output_L3L4_4 <= data_residuals_dly1;
+        if (wr_en_mem08) output_L5L6_1 <= data_residuals_dly1;
+        if (wr_en_mem09) output_L5L6_2 <= data_residuals_dly1;
+        if (wr_en_mem10) output_L5L6_3 <= data_residuals_dly1;
+        if (wr_en_mem11) output_L5L6_4 <= data_residuals_dly1;
+    end*/
+
 
     //////////////////////////////////////////////////////////////
     // write out the data from data_stream to memory

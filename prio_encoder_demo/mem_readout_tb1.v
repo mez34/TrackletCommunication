@@ -98,7 +98,7 @@ module mem_readout_tb1;
     wire finished;                  //whole communication process is finished
 
     //Instantiate the Unit Under Test
-    /*ProjTransceiver comm_int(
+    ProjTransceiver comm_int(
         .clk(clk),                  // main clock
         //.reset(reset),              // synchronously negated active-hi reset
         .reset(new_event),      // start over
@@ -122,18 +122,18 @@ module mem_readout_tb1;
         .number_in11(items10),          // starting number of items for this memory
         .number_in12(items11),          // starting number of items for this memory
     
-        .input_L1L2_1({9'b1,mem_dat00}),     
-        .input_L1L2_2({9'b1,mem_dat01}),     
-        .input_L1L2_3({9'b1,mem_dat02}),     
-        .input_L1L2_4({9'b1,mem_dat03}),     
-        .input_L3L4_1({9'b1,mem_dat04}),     
-        .input_L3L4_2({9'b1,mem_dat05}),     
-        .input_L3L4_3({9'b1,mem_dat06}),     
-        .input_L3L4_4({9'b1,mem_dat07}),  
-        .input_L5L6_1({9'b1,mem_dat08}),
-        .input_L5L6_2({9'b1,mem_dat09}),
-        .input_L5L6_3({9'b1,mem_dat10}),
-        .input_L5L6_4({9'b1,mem_dat11}),   
+        .input_L1L2_1({9'hFFF,mem_dat00}),     
+        .input_L1L2_2({9'hFFF,mem_dat01}),     
+        .input_L1L2_3({9'hFFF,mem_dat02}),     
+        .input_L1L2_4({9'hFFF,mem_dat03}),     
+        .input_L3L4_1({9'hFFF,mem_dat04}),     
+        .input_L3L4_2({9'hFFF,mem_dat05}),     
+        .input_L3L4_3({9'hFFF,mem_dat06}),     
+        .input_L3L4_4({9'hFFF,mem_dat07}),  
+        .input_L5L6_1({9'hFFF,mem_dat08}),
+        .input_L5L6_2({9'hFFF,mem_dat09}),
+        .input_L5L6_3({9'hFFF,mem_dat10}),
+        .input_L5L6_4({9'hFFF,mem_dat11}),   
     
         .read_add1(addr00),          // lower part of memory address
         .read_add2(addr01),          // lower part of memory address
@@ -161,16 +161,7 @@ module mem_readout_tb1;
         .output_L5L6_3(output_L5L6_3), //returning residuals for this memory  
         .output_L5L6_4(output_L5L6_4) //returning residuals for this memory 
     
-    );*/
-
-
-
-
-
-
-
-
-
+    );
 
 
 
@@ -181,7 +172,7 @@ module mem_readout_tb1;
 
     
 	// Instantiate the Unit Under Test (UUT)
-	mem_readout_top uut(
+	/*mem_readout_top uut(
         .clk(clk),                  // main clock
         //.reset(reset),              // synchronously negated active-hi reset
         .reset(fifo_rst4),      // start over
@@ -227,33 +218,19 @@ module mem_readout_tb1;
         .read_add10(addr09),          // lower part of memory address
         .read_add11(addr10),          // lower part of memory address
         .read_add12(addr11),          // lower part of memory address
-        
-        /*.output_L1L2_1(output_L1L2_1), //returning residuals for this memory
-        .output_L1L2_2(output_L1L2_2), //returning residuals for this memory
-        .output_L1L2_3(output_L1L2_3), //returning residuals for this memory
-        .output_L1L2_4(output_L1L2_4), //returning residuals for this memory
-        .output_L3L4_1(output_L3L4_1), //returning residuals for this memory
-        .output_L3L4_2(output_L3L4_2), //returning residuals for this memory
-        .output_L3L4_3(output_L3L4_3), //returning residuals for this memory
-        .output_L3L4_4(output_L3L4_4), //returning residuals for this memory
-        .output_L5L6_1(output_L5L6_1), //returning residuals for this memory        
-        .output_L5L6_2(output_L5L6_2), //returning residuals for this memory  
-        .output_L5L6_3(output_L5L6_3), //returning residuals for this memory  
-        .output_L5L6_4(output_L5L6_4), //returning residuals for this memory */ 
-        
-        
+     
         .mem_dat_stream(mem_dat_stream),
         .valid(valid),
         .done(done)                 // no more items
-    );
+    );*/
 
     //instantiate the UUT for reading residuals and sending to different memories
-    mem_readin_top uut1(
+    /*mem_readin_top uut1(
         .clk(clk),
         .reset(fifo_rst4),
         .data_residuals(data_output),
         .datanull(FIFO_EMPTY)
-    );
+    );*/
     
     reg [5:0] new_event_period;
 
@@ -373,18 +350,18 @@ module mem_readout_tb1;
         read_addr09 <= addr09;
         read_addr10 <= addr10;
         read_addr11 <= addr11;
-        fifo_rst1 <= new_event;
+   /*     fifo_rst1 <= new_event;
         fifo_rst2 <= fifo_rst1;
         fifo_rst3 <= fifo_rst2;
         fifo_rst4 <= fifo_rst3;
         fifo_rst <= ( new_event || fifo_rst1 || fifo_rst2 || fifo_rst3 || fifo_rst4 );
         FIFO_wr_en <= valid;        //delay on the valid signal because data is off by one clock tick
-        FIFO_rd_en <= !fifo_rst;
+        FIFO_rd_en <= !fifo_rst; */
     end
 
     /////////////////////////////////////////////////////////////////////
     // send the mem_dat_stream to a dualclock FIFO
-    fifo_projection_out fifo1(
+   /* fifo_projection_out fifo1(
         .rst(fifo_rst),                             // 1 bit in data reset
         .wr_clk(clk),                               // 1 bit in write clock
         .rd_clk(clk),                               // 1 bit in read clock
@@ -394,7 +371,7 @@ module mem_readout_tb1;
         .dout(data_output),                         // 54 bit out data out of FIFO
         .full(FIFO_FULL),                           // 1 bit out FIFO full signal
         .empty(FIFO_EMPTY)                          // 1 bit out FIFO empty signal
-      );
+      );*/
 
                        
     // periodically start a new event
