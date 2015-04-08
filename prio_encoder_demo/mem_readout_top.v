@@ -31,53 +31,53 @@ module mem_readout_top(
     // A memory block
     input [5:0] number_in1,          // starting number of items for this memory
     output [5:0] read_add1,          // memory address
-    input [44:0] input_L1L2_1,       // contents of this memory
+    input [53:0] input_L1L2_1,       // contents of this memory
     // A memory block
     input [5:0] number_in2,          // starting number of items for this memory
     output [5:0] read_add2,          // memory address
-    input [44:0] input_L1L2_2,       // contents of this memory
+    input [53:0] input_L1L2_2,       // contents of this memory
     // A memory block
     input [5:0] number_in3,          // starting number of items for this memory
     output [5:0] read_add3,          // memory address
-    input [44:0] input_L1L2_3,       // contents of this memory
+    input [53:0] input_L1L2_3,       // contents of this memory
     // A memory block
     input [5:0] number_in4,          // starting number of items for this memory
     output [5:0] read_add4,          // memory address
-    input [44:0] input_L1L2_4,       // contents of this memory
+    input [53:0] input_L1L2_4,       // contents of this memory
     // A memory block
     input [5:0] number_in5,          // starting number of items for this memory
     output [5:0] read_add5,          // memory address
-    input [44:0] input_L3L4_1,       // contents of this memory
+    input [53:0] input_L3L4_1,       // contents of this memory
     // A memory block
     input [5:0] number_in6,          // starting number of items for this memory
     output [5:0] read_add6,          // memory address
-    input [44:0] input_L3L4_2,       // contents of this memory
+    input [53:0] input_L3L4_2,       // contents of this memory
     // A memory block
     input [5:0] number_in7,          // starting number of items for this memory
     output [5:0] read_add7,          // memory address
-    input [44:0] input_L3L4_3,       // contents of this memory
+    input [53:0] input_L3L4_3,       // contents of this memory
     // A memory block
     input [5:0] number_in8,          // starting number of items for this memory
     output [5:0] read_add8,          // memory address
-    input [44:0] input_L3L4_4,       // contents of this memory
+    input [53:0] input_L3L4_4,       // contents of this memory
     // A memory block
     input [5:0] number_in9,          // starting number of items for this memory
     output [5:0] read_add9,          // memory address
-    input [44:0] input_L5L6_1,       // contents of this memory
+    input [53:0] input_L5L6_1,       // contents of this memory
     // A memory block
     input [5:0] number_in10,          // starting number of items for this memory
     output [5:0] read_add10,          // memory address
-    input [44:0] input_L5L6_2,       // contents of this memory
+    input [53:0] input_L5L6_2,       // contents of this memory
     // A memory block
     input [5:0] number_in11,          // starting number of items for this memory
     output [5:0] read_add11,          // memory address
-    input [44:0] input_L5L6_3,       // contents of this memory
+    input [53:0] input_L5L6_3,       // contents of this memory
     // A memory block
     input [5:0] number_in12,          // starting number of items for this memory
     output [5:0] read_add12,          // memory address
-    input [44:0] input_L5L6_4,       // contents of this memory
+    input [53:0] input_L5L6_4,       // contents of this memory
 
-    output [53:0] output_L1L2_1,
+    /*output [53:0] output_L1L2_1,
     output [53:0] output_L1L2_2,
     output [53:0] output_L1L2_3,
     output [53:0] output_L1L2_4,
@@ -88,11 +88,11 @@ module mem_readout_top(
     output [53:0] output_L5L6_1,
     output [53:0] output_L5L6_2,
     output [53:0] output_L5L6_3,
-    output [53:0] output_L5L6_4,
+    output [53:0] output_L5L6_4,*/
     
     
     //output [44:0] header_stream,   // headers for sent data 
-    output [51:0] mem_dat_stream, // merged memory data stream
+    output [53:0] mem_dat_stream, // merged memory data stream
     output reg valid,             // valid data in merged memory stream
     output done                   // no more data
 
@@ -104,12 +104,6 @@ wire valid00, valid01, valid02, valid03, valid04, valid05, valid06, valid07, val
 wire [3:0] sel;
 wire [44:0] header_stream;
 
-wire input_data_stream;
-
-// FIFO internal outputs
-//wire ALMOSTEMPTY,ALMOSTFULL,EMPTY,FULL,RDERR,WRERR;
-//wire [51:0] outputdata;
-//wire WRCOUNT,RDCOUNT;
 
 // When 'reset' is asserted, terminate the current processing and get
 // set up for the new event. This requires that we holdoff on any output
@@ -229,13 +223,7 @@ always @ (posedge clk) begin
     valid <= !setup & (valid00 | valid01 | valid02 | valid03 | valid04 | valid05 | valid06 | valid07 | valid08 | valid09 | valid10 | valid11);
     //also use this valid signal for the write enable
 end
- 
-/*mem_readin_top disperse(
-    .clk(clk),
-    .reset(fifo_rst4),
-    .data_residuals(input_data_stream),
-    .datanull(FIFO_EMPTY)
-);*/
+
  
  
  

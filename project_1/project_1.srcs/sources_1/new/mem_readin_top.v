@@ -22,7 +22,7 @@
 module mem_readin_top(
     input clk,                      // main clock
     input reset,                // start over
-    input [51:0] data_residuals,    // data out from neighboring sector, from FIFO (would be residuals)
+    input [53:0] data_residuals,    // data out from neighboring sector, from FIFO (would be residuals)
     input datanull                  // when FIFO is empty data is not valid
 );
     reg [3:0] memory_addr;

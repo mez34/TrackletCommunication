@@ -67,8 +67,8 @@ module mem_readout_tb1;
     
     wire done;                  // no more items
     wire [44:0] header_stream;
-    wire [51:0] mem_dat_stream;
-    wire [51:0] data_output;
+    wire [53:0] mem_dat_stream;
+    wire [53:0] data_output;
     wire valid;                 // 'mem_dat_stream' has valid data
     
     // FIFO internal outputs
@@ -116,18 +116,18 @@ module mem_readout_tb1;
         .number_in11(items10),          // starting number of items for this memory
         .number_in12(items11),          // starting number of items for this memory
 
-        .input_L1L2_1(mem_dat00),     
-        .input_L1L2_2(mem_dat01),     
-        .input_L1L2_3(mem_dat02),     
-        .input_L1L2_4(mem_dat03),     
-        .input_L3L4_1(mem_dat04),     
-        .input_L3L4_2(mem_dat05),     
-        .input_L3L4_3(mem_dat06),     
-        .input_L3L4_4(mem_dat07),  
-        .input_L5L6_1(mem_dat08),
-        .input_L5L6_2(mem_dat09),
-        .input_L5L6_3(mem_dat10),
-        .input_L5L6_4(mem_dat11),   
+        .input_L1L2_1({9'b1,mem_dat00}),     
+        .input_L1L2_2({9'b1,mem_dat01}),     
+        .input_L1L2_3({9'b1,mem_dat02}),     
+        .input_L1L2_4({9'b1,mem_dat03}),     
+        .input_L3L4_1({9'b1,mem_dat04}),     
+        .input_L3L4_2({9'b1,mem_dat05}),     
+        .input_L3L4_3({9'b1,mem_dat06}),     
+        .input_L3L4_4({9'b1,mem_dat07}),  
+        .input_L5L6_1({9'b1,mem_dat08}),
+        .input_L5L6_2({9'b1,mem_dat09}),
+        .input_L5L6_3({9'b1,mem_dat10}),
+        .input_L5L6_4({9'b1,mem_dat11}),   
 
         .read_add1(addr00),          // lower part of memory address
         .read_add2(addr01),          // lower part of memory address
@@ -142,7 +142,7 @@ module mem_readout_tb1;
         .read_add11(addr10),          // lower part of memory address
         .read_add12(addr11),          // lower part of memory address
         
-        .output_L1L2_1(output_L1L2_1), //returning residuals for this memory
+        /*.output_L1L2_1(output_L1L2_1), //returning residuals for this memory
         .output_L1L2_2(output_L1L2_2), //returning residuals for this memory
         .output_L1L2_3(output_L1L2_3), //returning residuals for this memory
         .output_L1L2_4(output_L1L2_4), //returning residuals for this memory
@@ -153,7 +153,7 @@ module mem_readout_tb1;
         .output_L5L6_1(output_L5L6_1), //returning residuals for this memory        
         .output_L5L6_2(output_L5L6_2), //returning residuals for this memory  
         .output_L5L6_3(output_L5L6_3), //returning residuals for this memory  
-        .output_L5L6_4(output_L5L6_4), //returning residuals for this memory  
+        .output_L5L6_4(output_L5L6_4), //returning residuals for this memory */ 
         
         
         .mem_dat_stream(mem_dat_stream),
@@ -377,10 +377,10 @@ module mem_readout_tb1;
         .rst(fifo_rst),                             // 1 bit in data reset
         .wr_clk(clk),                               // 1 bit in write clock
         .rd_clk(clk),                               // 1 bit in read clock
-        .din(mem_dat_stream),                       // 52 bit in data into FIFO
+        .din(mem_dat_stream),                       // 54 bit in data into FIFO
         .wr_en(FIFO_wr_en),                         // 1 bit in write enable
         .rd_en(FIFO_rd_en),                         // 1 bit in read enable
-        .dout(data_output),                         // 52 bit out data out of FIFO
+        .dout(data_output),                         // 54 bit out data out of FIFO
         .full(FIFO_FULL),                           // 1 bit out FIFO full signal
         .empty(FIFO_EMPTY)                          // 1 bit out FIFO empty signal
       );
