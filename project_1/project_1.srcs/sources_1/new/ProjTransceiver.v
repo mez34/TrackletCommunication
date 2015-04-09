@@ -101,6 +101,7 @@ reg [2:0] BX_pipe;
 reg first_clk_pipe;
 
 wire done_sending_proj;
+
 wire valid;
 wire [53:0] mem_dat_stream; //priority encoded data stream from the 12 memories
 wire [53:0] data_output;    //same memory stream but now coming from the FIFO
@@ -164,7 +165,7 @@ mem_readout_top send_proj(
     
     .mem_dat_stream(mem_dat_stream),
     .valid(valid),
-    .done(done_sending_proj)                 // no more items
+    .none(done_sending_proj)                 // no more items
 );
 
 always @ (posedge clk) begin

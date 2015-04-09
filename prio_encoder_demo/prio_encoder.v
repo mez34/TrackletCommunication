@@ -33,7 +33,7 @@ module prio_encoder(
     output reg sel10,
     output reg sel11,
     output reg [3:0] sel,   // binary encoded
-    output reg done
+    output reg none
 );
 
 //////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ always @ (posedge clk) begin
     sel11 <= has_dat11 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08 & !has_dat09 & !has_dat10;
     
    // assert 'none' when all inputs are false
-    done <= !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08 & !has_dat09 & !has_dat10 &!has_dat11;
+    none <= !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08 & !has_dat09 & !has_dat10 &!has_dat11;
 end 
 
 //////////////////////////////////////////////////////////////////////////

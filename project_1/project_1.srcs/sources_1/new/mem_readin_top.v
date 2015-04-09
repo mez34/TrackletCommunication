@@ -45,10 +45,13 @@ module mem_readin_top(
     reg [53:0] data_residuals_dly1;
     reg datanull_dly;
     
-    //wr_en (write enables for the 12 memories) & write_addr (write addresses for the 12 memories) & item counter for each memory
+    reg valid;
+    
+    //wr_en (write enables for the 12 memories) & write_addr (write addresses for the 12 memories) & item counter for each memory   
     reg wr_en_mem00, wr_en_mem01, wr_en_mem02, wr_en_mem03, wr_en_mem04, wr_en_mem05, wr_en_mem06, wr_en_mem07, wr_en_mem08, wr_en_mem09, wr_en_mem10, wr_en_mem11;
     reg [4:0] write_addr00, write_addr01, write_addr02, write_addr03, write_addr04, write_addr05, write_addr06, write_addr07, write_addr08, write_addr09, write_addr10, write_addr11;
     reg [5:0] num_items00, num_items01, num_items02, num_items03, num_items04, num_items05, num_items06, num_items07, num_items08, num_items09, num_items10, num_items11;
+    
     
     always @ (posedge clk) begin //delay initalization
         new_event_dly1 <= reset;
@@ -371,8 +374,8 @@ module mem_readin_top(
         end
     end
 
-    always @ (posedge clk) begin
-        if (wr_en_mem00) output_L1L2_1 <= data_residuals_dly1[53:0];
+    always @ (posedge clk) begin  //make a data stream for each memory
+        if (wr_en_mem00) output_L1L2_1 <= data_residuals_dly1;
         if (wr_en_mem01) output_L1L2_2 <= data_residuals_dly1;
         if (wr_en_mem02) output_L1L2_3 <= data_residuals_dly1;
         if (wr_en_mem03) output_L1L2_4 <= data_residuals_dly1;
@@ -386,10 +389,16 @@ module mem_readin_top(
         if (wr_en_mem11) output_L5L6_4 <= data_residuals_dly1;
     end
 
+    always @ (posedge clk) begin
+       valid <= wr_en_mem00 | wr_en_mem01 | wr_en_mem02 | wr_en_mem03 | wr_en_mem04 | wr_en_mem05 
+           | wr_en_mem06 | wr_en_mem07 | wr_en_mem08 | wr_en_mem09 | wr_en_mem10 | wr_en_mem11;
+    end
+
+
 
     //////////////////////////////////////////////////////////////
     // write out the data from data_stream to memory
-    memory #(45,3) storeinMem00( .output_data(final_residuals), .clock(clk), .write_address(write_addr00), .write_enable(wr_en_mem00), 
+   /* memory #(45,3) storeinMem00( .output_data(final_residuals), .clock(clk), .write_address(write_addr00), .write_enable(wr_en_mem00), 
         .read_address(5'b00000), .input_data({data_residuals_dly1[51:49],data_residuals_dly1[44:0]}) );
     memory #(45,3) storeinMem01( .output_data(final_residuals), .clock(clk), .write_address(write_addr01), .write_enable(wr_en_mem01), 
         .read_address(5'b00000), .input_data({data_residuals_dly1[51:49],data_residuals_dly1[44:0]}) );
@@ -412,6 +421,6 @@ module mem_readin_top(
     memory #(45,3) storeinMem10( .output_data(final_residuals), .clock(clk), .write_address(write_addr10), .write_enable(wr_en_mem10), 
         .read_address(5'b00000), .input_data({data_residuals_dly1[51:49],data_residuals_dly1[44:0]}) );
     memory #(45,3) storeinMem11( .output_data(final_residuals), .clock(clk), .write_address(write_addr11), .write_enable(wr_en_mem11), 
-        .read_address(5'b00000), .input_data({data_residuals_dly1[51:49],data_residuals_dly1[44:0]}) );
+        .read_address(5'b00000), .input_data({data_residuals_dly1[51:49],data_residuals_dly1[44:0]}) );*/
 
 endmodule

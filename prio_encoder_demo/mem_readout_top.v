@@ -75,26 +75,12 @@ module mem_readout_top(
     // A memory block
     input [5:0] number_in12,          // starting number of items for this memory
     output [5:0] read_add12,          // memory address
-    input [53:0] input_L5L6_4,       // contents of this memory
-
-    /*output [53:0] output_L1L2_1,
-    output [53:0] output_L1L2_2,
-    output [53:0] output_L1L2_3,
-    output [53:0] output_L1L2_4,
-    output [53:0] output_L3L4_1,
-    output [53:0] output_L3L4_2,
-    output [53:0] output_L3L4_3,
-    output [53:0] output_L3L4_4,
-    output [53:0] output_L5L6_1,
-    output [53:0] output_L5L6_2,
-    output [53:0] output_L5L6_3,
-    output [53:0] output_L5L6_4,*/
-    
+    input [53:0] input_L5L6_4,       // contents of this memory 
     
     //output [44:0] header_stream,   // headers for sent data 
     output [53:0] mem_dat_stream, // merged memory data stream
     output reg valid,             // valid data in merged memory stream
-    output done                   // no more data
+    output none                   // no more data
 
 );
 
@@ -175,7 +161,7 @@ prio_encoder prio_encoder (
     .sel10(sel10),
     .sel11(sel11),
     .sel(sel[3:0]),   // binary encoded
-    .done(done)       // no more data
+    .none(none)       // no more data
 );
 //////////////////////////////////////////////////////////////////////////////////
 // write the header for the datastream
