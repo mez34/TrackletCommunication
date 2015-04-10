@@ -6,7 +6,7 @@
 module prio_encoder(
     // Inputs:
     input clk,
-    //input first_dat,
+    input first_dat,
     input has_dat00,
     input has_dat01,
     input has_dat02,
@@ -61,6 +61,7 @@ end
 // Implement an 8:3 encoder. The final mux that combines the memory streams
 // works better with with an encoded select as compared to individual select signals.
 always @ (posedge clk) begin
+    if (first_dat) sel <= 4'b1111;
     if (sel00) sel <= 4'b0001;
     if (sel01) sel <= 4'b0010;
     if (sel02) sel <= 4'b0011;

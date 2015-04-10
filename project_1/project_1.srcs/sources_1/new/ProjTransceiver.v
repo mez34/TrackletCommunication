@@ -103,7 +103,7 @@ reg first_clk_pipe;
 wire done_sending_proj;
 
 wire valid;
-wire [53:0] mem_dat_stream; //priority encoded data stream from the 12 memories
+wire [51:0] mem_dat_stream; //priority encoded data stream from the 12 memories
 wire [53:0] data_output;    //same memory stream but now coming from the FIFO
 
     // FIFO internal outputs
@@ -184,7 +184,7 @@ end
         .rst(fifo_rst),                             // 1 bit in data reset
         .wr_clk(clk),                               // 1 bit in write clock
         .rd_clk(clk),                               // 1 bit in read clock
-        .din(mem_dat_stream),                       // 54 bit in data into FIFO
+        .din({3'hF,mem_dat_stream}),                // 54 bit in data into FIFO
         .wr_en(FIFO_wr_en),                         // 1 bit in write enable
         .rd_en(FIFO_rd_en),                         // 1 bit in read enable
         .dout(data_output),                         // 54 bit out data out of FIFO

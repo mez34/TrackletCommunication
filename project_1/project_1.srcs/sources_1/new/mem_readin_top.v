@@ -21,9 +21,9 @@
 
 module mem_readin_top(
     input clk,                      // main clock
-    input reset,                // start over
+    input reset,                    // start over
     input [53:0] data_residuals,    // data out from neighboring sector, from FIFO (would be residuals)
-    input datanull,                  // when FIFO is empty data is not valid
+    input datanull,                 // when FIFO is empty data is not valid
     
     output reg [53:0] output_L1L2_1,
     output reg [53:0] output_L1L2_2,
@@ -126,7 +126,7 @@ module mem_readin_top(
             // use the 4 bits containing memory information and set a write enable for the memory it should be sent to
             // also increment the write_addr for that memory so that data does not overwrite itself 
             // increment num_items for that memory (counter for how many residuals data has
-            case (data_residuals[48:45])
+            case (data_residuals[47:44])
                  4'b0001: begin 
                     //output_L1L2_1 <= data_residuals_dly1[53:0];
                     wr_en_mem00 <= 1'b1;

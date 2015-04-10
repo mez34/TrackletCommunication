@@ -23,18 +23,18 @@ module mem_readout_tb1;
     wire [5:0] items10;          // starting number of items for this memory
     wire [5:0] items11;          // starting number of items for this memory
     
-    wire [44:0] mem_dat00;       // data from this memory
-    wire [44:0] mem_dat01;       // data from this memory
-    wire [44:0] mem_dat02;       // data from this memory
-    wire [44:0] mem_dat03;       // data from this memory
-    wire [44:0] mem_dat04;       // data from this memory
-    wire [44:0] mem_dat05;       // data from this memory
-    wire [44:0] mem_dat06;       // data from this memory
-    wire [44:0] mem_dat07;       // data from this memory
-    wire [44:0] mem_dat08;       // data from this memory
-    wire [44:0] mem_dat09;       // data from this memory
-    wire [44:0] mem_dat10;       // data from this memory
-    wire [44:0] mem_dat11;       // data from this memory
+    wire [43:0] mem_dat00;       // data from this memory
+    wire [43:0] mem_dat01;       // data from this memory
+    wire [43:0] mem_dat02;       // data from this memory
+    wire [43:0] mem_dat03;       // data from this memory
+    wire [43:0] mem_dat04;       // data from this memory
+    wire [43:0] mem_dat05;       // data from this memory
+    wire [43:0] mem_dat06;       // data from this memory
+    wire [43:0] mem_dat07;       // data from this memory
+    wire [43:0] mem_dat08;       // data from this memory
+    wire [43:0] mem_dat09;       // data from this memory
+    wire [43:0] mem_dat10;       // data from this memory
+    wire [43:0] mem_dat11;       // data from this memory
     
     reg [5:0] nitems_addr;          // counts number of items in the data
     
@@ -67,7 +67,6 @@ module mem_readout_tb1;
     wire [5:0] addr11;          // lower part of memory address
     
     wire done;                  // no more items
-    wire [44:0] header_stream;
     wire [53:0] mem_dat_stream;
     wire [53:0] data_output;
     wire valid;                 // 'mem_dat_stream' has valid data
@@ -122,18 +121,18 @@ module mem_readout_tb1;
         .number_in11(items10),          // starting number of items for this memory
         .number_in12(items11),          // starting number of items for this memory
     
-        .input_L1L2_1({9'hFFF,mem_dat00}),     
-        .input_L1L2_2({9'hFFF,mem_dat01}),     
-        .input_L1L2_3({9'hFFF,mem_dat02}),     
-        .input_L1L2_4({9'hFFF,mem_dat03}),     
-        .input_L3L4_1({9'hFFF,mem_dat04}),     
-        .input_L3L4_2({9'hFFF,mem_dat05}),     
-        .input_L3L4_3({9'hFFF,mem_dat06}),     
-        .input_L3L4_4({9'hFFF,mem_dat07}),  
-        .input_L5L6_1({9'hFFF,mem_dat08}),
-        .input_L5L6_2({9'hFFF,mem_dat09}),
-        .input_L5L6_3({9'hFFF,mem_dat10}),
-        .input_L5L6_4({9'hFFF,mem_dat11}),   
+        .input_L1L2_1({10'hFFF,mem_dat00[43:0]}),     
+        .input_L1L2_2({10'hFFF,mem_dat01[43:0]}),     
+        .input_L1L2_3({10'hFFF,mem_dat02[43:0]}),     
+        .input_L1L2_4({10'hFFF,mem_dat03[43:0]}),     
+        .input_L3L4_1({10'hFFF,mem_dat04[43:0]}),     
+        .input_L3L4_2({10'hFFF,mem_dat05[43:0]}),     
+        .input_L3L4_3({10'hFFF,mem_dat06[43:0]}),     
+        .input_L3L4_4({10'hFFF,mem_dat07[43:0]}),  
+        .input_L5L6_1({10'hFFF,mem_dat08[43:0]}),
+        .input_L5L6_2({10'hFFF,mem_dat09[43:0]}),
+        .input_L5L6_3({10'hFFF,mem_dat10[43:0]}),
+        .input_L5L6_4({10'hFFF,mem_dat11[43:0]}),   
     
         .read_add1(addr00),          // lower part of memory address
         .read_add2(addr01),          // lower part of memory address
@@ -167,71 +166,6 @@ module mem_readout_tb1;
 
 
 
-
-
-
-    
-	// Instantiate the Unit Under Test (UUT)
-	/*mem_readout_top uut(
-        .clk(clk),                  // main clock
-        //.reset(reset),              // synchronously negated active-hi reset
-        .reset(fifo_rst4),      // start over
-        .BX(BX),                    // BX number
-        .clk_cnt(clk_cnt),          // clock cylces gone by in BX
-        .BX_pipe(BX_pipe),
-        
-        .number_in1(items00),          // starting number of items for this memory
-        .number_in2(items01),          // starting number of items for this memory
-        .number_in3(items02),          // starting number of items for this memory
-        .number_in4(items03),          // starting number of items for this memory
-        .number_in5(items04),          // starting number of items for this memory
-        .number_in6(items05),          // starting number of items for this memory
-        .number_in7(items06),          // starting number of items for this memory
-        .number_in8(items07),          // starting number of items for this memory
-        .number_in9(items08),          // starting number of items for this memory
-        .number_in10(items09),          // starting number of items for this memory
-        .number_in11(items10),          // starting number of items for this memory
-        .number_in12(items11),          // starting number of items for this memory
-
-        .input_L1L2_1({9'b1,mem_dat00}),     
-        .input_L1L2_2({9'b1,mem_dat01}),     
-        .input_L1L2_3({9'b1,mem_dat02}),     
-        .input_L1L2_4({9'b1,mem_dat03}),     
-        .input_L3L4_1({9'b1,mem_dat04}),     
-        .input_L3L4_2({9'b1,mem_dat05}),     
-        .input_L3L4_3({9'b1,mem_dat06}),     
-        .input_L3L4_4({9'b1,mem_dat07}),  
-        .input_L5L6_1({9'b1,mem_dat08}),
-        .input_L5L6_2({9'b1,mem_dat09}),
-        .input_L5L6_3({9'b1,mem_dat10}),
-        .input_L5L6_4({9'b1,mem_dat11}),   
-
-        .read_add1(addr00),          // lower part of memory address
-        .read_add2(addr01),          // lower part of memory address
-        .read_add3(addr02),          // lower part of memory address
-        .read_add4(addr03),          // lower part of memory address
-        .read_add5(addr04),          // lower part of memory address
-        .read_add6(addr05),          // lower part of memory address
-        .read_add7(addr06),          // lower part of memory address
-        .read_add8(addr07),          // lower part of memory address
-        .read_add9(addr08),          // lower part of memory address
-        .read_add10(addr09),          // lower part of memory address
-        .read_add11(addr10),          // lower part of memory address
-        .read_add12(addr11),          // lower part of memory address
-     
-        .mem_dat_stream(mem_dat_stream),
-        .valid(valid),
-        .done(done)                 // no more items
-    );*/
-
-    //instantiate the UUT for reading residuals and sending to different memories
-    /*mem_readin_top uut1(
-        .clk(clk),
-        .reset(fifo_rst4),
-        .data_residuals(data_output),
-        .datanull(FIFO_EMPTY)
-    );*/
-    
     reg [5:0] new_event_period;
 
 	initial begin
@@ -275,11 +209,6 @@ module mem_readout_tb1;
         #5 clk = ~clk;   // 100 MHz
     end
 
-    //////////////////////////////////////////////////////////////
-    // write out the data from data_stream to memory
-    //memory storeinMem00( .output_data(final_residuals), .clock(clk),
-    //    .write_address(5'b0), .write_enable(1'b1), .read_address(5'b00001), .input_data({data_output[51:49],data_output[44:0]}) );   
-
     /////////////////////////////////////////////////////////////
     // read in input data
     memory #(45,5,"/home/user/project_1/testdata0.txt") getMemDat00( .output_data(mem_dat00), .clock(clk),
@@ -306,8 +235,6 @@ module mem_readout_tb1;
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr10), .input_data(45'b0) );
     memory #(45,5,"/home/user/project_1/testdata11.txt") getMemDat11( .output_data(mem_dat11), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr11), .input_data(45'b0) );
-      
-    //numItems count00(.num_items(items00), .clock(clk) );
         
     //count the number of items in the data 
     //number of items is stored in the nitems_addr which is the last line in the RAM
@@ -350,36 +277,11 @@ module mem_readout_tb1;
         read_addr09 <= addr09;
         read_addr10 <= addr10;
         read_addr11 <= addr11;
-   /*     fifo_rst1 <= new_event;
-        fifo_rst2 <= fifo_rst1;
-        fifo_rst3 <= fifo_rst2;
-        fifo_rst4 <= fifo_rst3;
-        fifo_rst <= ( new_event || fifo_rst1 || fifo_rst2 || fifo_rst3 || fifo_rst4 );
-        FIFO_wr_en <= valid;        //delay on the valid signal because data is off by one clock tick
-        FIFO_rd_en <= !fifo_rst; */
     end
-
-    /////////////////////////////////////////////////////////////////////
-    // send the mem_dat_stream to a dualclock FIFO
-   /* fifo_projection_out fifo1(
-        .rst(fifo_rst),                             // 1 bit in data reset
-        .wr_clk(clk),                               // 1 bit in write clock
-        .rd_clk(clk),                               // 1 bit in read clock
-        .din(mem_dat_stream),                       // 54 bit in data into FIFO
-        .wr_en(FIFO_wr_en),                         // 1 bit in write enable
-        .rd_en(FIFO_rd_en),                         // 1 bit in read enable
-        .dout(data_output),                         // 54 bit out data out of FIFO
-        .full(FIFO_FULL),                           // 1 bit out FIFO full signal
-        .empty(FIFO_EMPTY)                          // 1 bit out FIFO empty signal
-      );*/
-
-                       
+               
     // periodically start a new event
     always @ (posedge clk) begin
-        if (new_event_period[5:0] == 6'd45) begin
-            //FIFO_rd_en <= 1'b1;
-        end
-        if (new_event_period[5:0] == 6'd50) begin
+        if (new_event_period[5:0] == 6'd60) begin
             new_event <= 1'b1;
             new_event_period <= 6'b0;
         end

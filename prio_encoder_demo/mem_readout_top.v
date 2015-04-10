@@ -22,8 +22,8 @@
 `timescale 1ns / 1ps
 
 module mem_readout_top(
-    input clk,                    // main clock
-    input reset,              // start over
+    input clk,                     // main clock
+    input reset,                   // start over
     input wire [2:0] BX,           // store BX
     input [6:0] clk_cnt,           // counter for # of clock cycles in processing BX
     input [2:0] BX_pipe,           // if clk_cnt reaches 7'b1, increment BX_pipe
@@ -78,7 +78,7 @@ module mem_readout_top(
     input [53:0] input_L5L6_4,       // contents of this memory 
     
     //output [44:0] header_stream,   // headers for sent data 
-    output [53:0] mem_dat_stream, // merged memory data stream
+    output [51:0] mem_dat_stream, // merged memory data stream
     output reg valid,             // valid data in merged memory stream
     output none                   // no more data
 
@@ -134,7 +134,7 @@ prio_support prio_support11(.clk(clk), .initial_count(number_in12), .init(reset)
 prio_encoder prio_encoder (
     // Inputs:
     .clk(clk),
-    //.first_dat(first_dat),
+    .first_dat(reset),
     .has_dat00(has_dat00),
     .has_dat01(has_dat01),
     .has_dat02(has_dat02),
@@ -163,21 +163,6 @@ prio_encoder prio_encoder (
     .sel(sel[3:0]),   // binary encoded
     .none(none)       // no more data
 );
-//////////////////////////////////////////////////////////////////////////////////
-// write the header for the datastream
-/*header fullheader(
-    .clk(clk),
-    .new_event(reset),
-    .BX(BX),
-    .clk_cnt(clk_cnt),
-    .BX_pipe(BX_pipe),
-    .addr(read_add1),
-    .has_data(has_dat00),
-    .sel(sel[3:0]),
-    .num(number_in1),
-    //output header into datastream
-    .header_stream(header_stream)
-);*/
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -186,18 +171,18 @@ mem_mux mem_mux(
     .clk(clk),
     .BX(BX),
     .sel(sel[3:0]),   // binary encoded
-    .mem_dat00(input_L1L2_1[44:0]),
-    .mem_dat01(input_L1L2_2[44:0]),
-    .mem_dat02(input_L1L2_3[44:0]),
-    .mem_dat03(input_L1L2_4[44:0]),
-    .mem_dat04(input_L3L4_1[44:0]),
-    .mem_dat05(input_L3L4_2[44:0]),
-    .mem_dat06(input_L3L4_3[44:0]),
-    .mem_dat07(input_L3L4_4[44:0]),
-    .mem_dat08(input_L5L6_1[44:0]),
-    .mem_dat09(input_L5L6_2[44:0]),
-    .mem_dat10(input_L5L6_3[44:0]),
-    .mem_dat11(input_L5L6_4[44:0]),
+    .mem_dat00(input_L1L2_1[43:0]),
+    .mem_dat01(input_L1L2_2[43:0]),
+    .mem_dat02(input_L1L2_3[43:0]),
+    .mem_dat03(input_L1L2_4[43:0]),
+    .mem_dat04(input_L3L4_1[43:0]),
+    .mem_dat05(input_L3L4_2[43:0]),
+    .mem_dat06(input_L3L4_3[43:0]),
+    .mem_dat07(input_L3L4_4[43:0]),
+    .mem_dat08(input_L5L6_1[43:0]),
+    .mem_dat09(input_L5L6_2[43:0]),
+    .mem_dat10(input_L5L6_3[43:0]),
+    .mem_dat11(input_L5L6_4[43:0]),
 //    .header_stream(header_stream),
     
     .mem_dat_stream(mem_dat_stream)
