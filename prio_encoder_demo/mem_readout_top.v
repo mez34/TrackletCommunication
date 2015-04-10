@@ -134,7 +134,7 @@ prio_support prio_support11(.clk(clk), .initial_count(number_in12), .init(reset)
 prio_encoder prio_encoder (
     // Inputs:
     .clk(clk),
-    //.first_dat(first_dat),
+    .first_dat(reset),
     .has_dat00(has_dat00),
     .has_dat01(has_dat01),
     .has_dat02(has_dat02),
@@ -148,6 +148,7 @@ prio_encoder prio_encoder (
     .has_dat10(has_dat10),
     .has_dat11(has_dat11),
     // Outputs:
+//    .first(first_dat),
     .sel00(sel00),
     .sel01(sel01),
     .sel02(sel02),
@@ -163,22 +164,6 @@ prio_encoder prio_encoder (
     .sel(sel[3:0]),   // binary encoded
     .none(none)       // no more data
 );
-//////////////////////////////////////////////////////////////////////////////////
-// write the header for the datastream
-/*header fullheader(
-    .clk(clk),
-    .new_event(reset),
-    .BX(BX),
-    .clk_cnt(clk_cnt),
-    .BX_pipe(BX_pipe),
-    .addr(read_add1),
-    .has_data(has_dat00),
-    .sel(sel[3:0]),
-    .num(number_in1),
-    //output header into datastream
-    .header_stream(header_stream)
-);*/
-
 
 //////////////////////////////////////////////////////////////////////////////////
 // connect a mux to merge the data streams

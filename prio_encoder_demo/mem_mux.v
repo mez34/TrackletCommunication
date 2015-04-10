@@ -27,6 +27,7 @@ module mem_mux(
 // as compared to individual 'select' signals.
 always @ (posedge clk) begin
     case (sel[3:0])
+        4'b1111: mem_dat_stream <= {BX,50'b0};
         4'b0001: mem_dat_stream <= {2'b1,BX,sel,mem_dat00};
         4'b0010: mem_dat_stream <= {2'b1,BX,sel,mem_dat01};
         4'b0011: mem_dat_stream <= {2'b1,BX,sel,mem_dat02};

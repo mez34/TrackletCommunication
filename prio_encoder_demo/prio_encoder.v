@@ -6,7 +6,7 @@
 module prio_encoder(
     // Inputs:
     input clk,
-    //input first_dat,
+    input first_dat,
     input has_dat00,
     input has_dat01,
     input has_dat02,
@@ -20,6 +20,7 @@ module prio_encoder(
     input has_dat10,
     input has_dat11,
     // Outputs:
+    //output reg first,
     output reg sel00,
     output reg sel01,
     output reg sel02,
@@ -36,31 +37,40 @@ module prio_encoder(
     output reg none
 );
 
+reg first;
+
 //////////////////////////////////////////////////////////////////////////
 // Implement a registered priority encoder
 // The '00' input has the highest priority
 always @ (posedge clk) begin
-    sel00 <= has_dat00;
-    sel01 <= has_dat01 & !has_dat00;
-    sel02 <= has_dat02 & !has_dat00 & !has_dat01;
-    sel03 <= has_dat03 & !has_dat00 & !has_dat01 & !has_dat02;
-    sel04 <= has_dat04 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03;
-    sel05 <= has_dat05 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04;
-    sel06 <= has_dat06 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05;
-    sel07 <= has_dat07 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06;
-    sel08 <= has_dat08 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07;
-    sel09 <= has_dat09 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08;
-    sel10 <= has_dat10 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08 & !has_dat09;
-    sel11 <= has_dat11 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08 & !has_dat09 & !has_dat10;
-    
-   // assert 'none' when all inputs are false
-    none <= !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08 & !has_dat09 & !has_dat10 &!has_dat11;
+    if (first_dat) begin
+        first <= 1'b1;
+    end
+    else begin
+        first <= 1'b0;
+        sel00 <= has_dat00;
+        sel01 <= has_dat01 & !has_dat00;
+        sel02 <= has_dat02 & !has_dat00 & !has_dat01;
+        sel03 <= has_dat03 & !has_dat00 & !has_dat01 & !has_dat02;
+        sel04 <= has_dat04 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03;
+        sel05 <= has_dat05 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04;
+        sel06 <= has_dat06 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05;
+        sel07 <= has_dat07 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06;
+        sel08 <= has_dat08 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07;
+        sel09 <= has_dat09 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08;
+        sel10 <= has_dat10 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08 & !has_dat09;
+        sel11 <= has_dat11 & !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08 & !has_dat09 & !has_dat10;
+        // assert 'none' when all inputs are false
+        none <= !has_dat00 & !has_dat01 & !has_dat02 & !has_dat03 & !has_dat04 & !has_dat05 & !has_dat06 & !has_dat07 & !has_dat08 & !has_dat09 & !has_dat10 &!has_dat11;
+    end
+
 end 
 
 //////////////////////////////////////////////////////////////////////////
 // Implement an 8:3 encoder. The final mux that combines the memory streams
 // works better with with an encoded select as compared to individual select signals.
 always @ (posedge clk) begin
+    if (first) sel <= 4'b1111;
     if (sel00) sel <= 4'b0001;
     if (sel01) sel <= 4'b0010;
     if (sel02) sel <= 4'b0011;
