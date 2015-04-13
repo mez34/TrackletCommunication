@@ -192,7 +192,7 @@ mem_mux mem_mux(
 // merge the 'valid' bits by 'OR'ing them together. Disable 'valid' during setup.
 always @ (posedge clk) begin
     valid <= !setup & (valid00 | valid01 | valid02 | valid03 | valid04 | valid05 | valid06 | valid07 | valid08 | valid09 | valid10 | valid11);
-    send_BX <= !setup & sel[3:0]==4'b1;
+    send_BX <= (!setup & sel[3:0]==4'b1111)? 1'b1 : 1'b0;
     //also use this valid signal for the write enable
 end
 

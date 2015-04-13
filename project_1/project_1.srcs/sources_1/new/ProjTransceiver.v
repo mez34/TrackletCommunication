@@ -103,7 +103,9 @@ reg first_clk_pipe;
 wire done_sending_proj;
 
 wire valid;
+reg valid_dly;
 wire [53:0] mem_dat_stream; //priority encoded data stream from the 12 memories
+reg [53:0] mem_dat_stream_dly;
 wire [53:0] data_output;    //same memory stream but now coming from the FIFO
 
     // FIFO internal outputs
@@ -175,8 +177,10 @@ always @ (posedge clk) begin
     fifo_rst3 <= fifo_rst2;
     fifo_rst4 <= fifo_rst3;
     fifo_rst <= ( reset || fifo_rst1 || fifo_rst2 || fifo_rst3 || fifo_rst4 );
-    FIFO_wr_en <= ( send_BX || valid );        //delay on the valid signal because data is off by one clock tick
+    valid_dly <= valid;
+    FIFO_wr_en <= ( valid_dly || send_BX);        //delay on the valid signal because data is off by one clock tick
     FIFO_rd_en <= !fifo_rst;
+    mem_dat_stream_dly <= mem_dat_stream;
 end
 
     /////////////////////////////////////////////////////////////////////
@@ -185,7 +189,7 @@ end
         .rst(fifo_rst),                             // 1 bit in data reset
         .wr_clk(clk),                               // 1 bit in write clock
         .rd_clk(clk),                               // 1 bit in read clock
-        .din(mem_dat_stream),                       // 54 bit in data into FIFO
+        .din(mem_dat_stream_dly),                       // 54 bit in data into FIFO
         .wr_en(FIFO_wr_en),                         // 1 bit in write enable
         .rd_en(FIFO_rd_en),                         // 1 bit in read enable
         .dout(data_output),                         // 54 bit out data out of FIFO
