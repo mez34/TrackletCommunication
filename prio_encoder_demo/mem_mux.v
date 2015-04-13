@@ -41,7 +41,6 @@ always @ (posedge clk) begin
         4'b1100: mem_dat_stream <= {2'b1,BX,sel,mem_dat10};
         4'b1101: mem_dat_stream <= {2'b1,BX,sel,mem_dat11};
         default  mem_dat_stream <= 53'b0;
-        //4'b1111: mem_dat_stream <= header_stream;
     endcase
 end
 

@@ -80,6 +80,7 @@ module mem_readout_top(
     //output [44:0] header_stream,   // headers for sent data 
     output [53:0] mem_dat_stream, // merged memory data stream
     output reg valid,             // valid data in merged memory stream
+    output reg send_BX,           // valid header with BX info
     output none                   // no more data
 
 );
@@ -88,7 +89,6 @@ module mem_readout_top(
 wire has_dat00, has_dat01, has_dat02, has_dat03, has_dat04, has_dat05, has_dat06, has_dat07, has_dat08, has_dat09, has_dat10, has_dat11;
 wire valid00, valid01, valid02, valid03, valid04, valid05, valid06, valid07, valid08, valid09, valid10, valid11;
 wire [3:0] sel;
-//wire [44:0] header_stream;
 
 
 // When 'reset' is asserted, terminate the current processing and get
@@ -192,6 +192,7 @@ mem_mux mem_mux(
 // merge the 'valid' bits by 'OR'ing them together. Disable 'valid' during setup.
 always @ (posedge clk) begin
     valid <= !setup & (valid00 | valid01 | valid02 | valid03 | valid04 | valid05 | valid06 | valid07 | valid08 | valid09 | valid10 | valid11);
+    send_BX <= !setup & sel[3:0]==4'b1;
     //also use this valid signal for the write enable
 end
 

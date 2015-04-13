@@ -165,6 +165,7 @@ mem_readout_top send_proj(
     
     .mem_dat_stream(mem_dat_stream),
     .valid(valid),
+    .send_BX(send_BX),
     .none(done_sending_proj)                 // no more items
 );
 
@@ -174,7 +175,7 @@ always @ (posedge clk) begin
     fifo_rst3 <= fifo_rst2;
     fifo_rst4 <= fifo_rst3;
     fifo_rst <= ( reset || fifo_rst1 || fifo_rst2 || fifo_rst3 || fifo_rst4 );
-    FIFO_wr_en <= valid;        //delay on the valid signal because data is off by one clock tick
+    FIFO_wr_en <= ( send_BX || valid );        //delay on the valid signal because data is off by one clock tick
     FIFO_rd_en <= !fifo_rst;
 end
 
