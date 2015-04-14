@@ -31,54 +31,54 @@ module mem_readout_top(
     // A memory block
     input [5:0] number_in1,          // starting number of items for this memory
     output [5:0] read_add1,          // memory address
-    input [53:0] input_L1L2_1,       // contents of this memory
+    input [43:0] input_L1L2_1,       // contents of this memory
     // A memory block
     input [5:0] number_in2,          // starting number of items for this memory
     output [5:0] read_add2,          // memory address
-    input [53:0] input_L1L2_2,       // contents of this memory
+    input [43:0] input_L1L2_2,       // contents of this memory
     // A memory block
     input [5:0] number_in3,          // starting number of items for this memory
     output [5:0] read_add3,          // memory address
-    input [53:0] input_L1L2_3,       // contents of this memory
+    input [43:0] input_L1L2_3,       // contents of this memory
     // A memory block
     input [5:0] number_in4,          // starting number of items for this memory
     output [5:0] read_add4,          // memory address
-    input [53:0] input_L1L2_4,       // contents of this memory
+    input [43:0] input_L1L2_4,       // contents of this memory
     // A memory block
     input [5:0] number_in5,          // starting number of items for this memory
     output [5:0] read_add5,          // memory address
-    input [53:0] input_L3L4_1,       // contents of this memory
+    input [43:0] input_L3L4_1,       // contents of this memory
     // A memory block
     input [5:0] number_in6,          // starting number of items for this memory
     output [5:0] read_add6,          // memory address
-    input [53:0] input_L3L4_2,       // contents of this memory
+    input [43:0] input_L3L4_2,       // contents of this memory
     // A memory block
     input [5:0] number_in7,          // starting number of items for this memory
     output [5:0] read_add7,          // memory address
-    input [53:0] input_L3L4_3,       // contents of this memory
+    input [43:0] input_L3L4_3,       // contents of this memory
     // A memory block
     input [5:0] number_in8,          // starting number of items for this memory
     output [5:0] read_add8,          // memory address
-    input [53:0] input_L3L4_4,       // contents of this memory
+    input [43:0] input_L3L4_4,       // contents of this memory
     // A memory block
     input [5:0] number_in9,          // starting number of items for this memory
     output [5:0] read_add9,          // memory address
-    input [53:0] input_L5L6_1,       // contents of this memory
+    input [43:0] input_L5L6_1,       // contents of this memory
     // A memory block
     input [5:0] number_in10,          // starting number of items for this memory
     output [5:0] read_add10,          // memory address
-    input [53:0] input_L5L6_2,       // contents of this memory
+    input [43:0] input_L5L6_2,       // contents of this memory
     // A memory block
     input [5:0] number_in11,          // starting number of items for this memory
     output [5:0] read_add11,          // memory address
-    input [53:0] input_L5L6_3,       // contents of this memory
+    input [43:0] input_L5L6_3,       // contents of this memory
     // A memory block
     input [5:0] number_in12,          // starting number of items for this memory
     output [5:0] read_add12,          // memory address
-    input [53:0] input_L5L6_4,       // contents of this memory 
+    input [43:0] input_L5L6_4,       // contents of this memory 
     
     //output [44:0] header_stream,   // headers for sent data 
-    output [53:0] mem_dat_stream, // merged memory data stream
+    output [47:0] mem_dat_stream, // merged memory data stream
     output reg valid,             // valid data in merged memory stream
     output reg send_BX,           // valid header with BX info
     output none                   // no more data
@@ -171,18 +171,18 @@ mem_mux mem_mux(
     .clk(clk),
     .BX(BX),
     .sel(sel[3:0]),   // binary encoded
-    .mem_dat00(input_L1L2_1[44:0]),
-    .mem_dat01(input_L1L2_2[44:0]),
-    .mem_dat02(input_L1L2_3[44:0]),
-    .mem_dat03(input_L1L2_4[44:0]),
-    .mem_dat04(input_L3L4_1[44:0]),
-    .mem_dat05(input_L3L4_2[44:0]),
-    .mem_dat06(input_L3L4_3[44:0]),
-    .mem_dat07(input_L3L4_4[44:0]),
-    .mem_dat08(input_L5L6_1[44:0]),
-    .mem_dat09(input_L5L6_2[44:0]),
-    .mem_dat10(input_L5L6_3[44:0]),
-    .mem_dat11(input_L5L6_4[44:0]),
+    .mem_dat00(input_L1L2_1[43:0]),
+    .mem_dat01(input_L1L2_2[43:0]),
+    .mem_dat02(input_L1L2_3[43:0]),
+    .mem_dat03(input_L1L2_4[43:0]),
+    .mem_dat04(input_L3L4_1[43:0]),
+    .mem_dat05(input_L3L4_2[43:0]),
+    .mem_dat06(input_L3L4_3[43:0]),
+    .mem_dat07(input_L3L4_4[43:0]),
+    .mem_dat08(input_L5L6_1[43:0]),
+    .mem_dat09(input_L5L6_2[43:0]),
+    .mem_dat10(input_L5L6_3[43:0]),
+    .mem_dat11(input_L5L6_4[43:0]),
 //    .header_stream(header_stream),
     
     .mem_dat_stream(mem_dat_stream)

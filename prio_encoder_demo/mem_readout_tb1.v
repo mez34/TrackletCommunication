@@ -10,6 +10,8 @@ module mem_readout_tb1;
     reg [2:0] BX_pipe;           // if clk_cnt reaches 7'b1, increment BX_pipe
     reg start;
     
+    reg first_clk;
+    
     wire [5:0] items00;          // starting number of items for this memory
     wire [5:0] items01;          // starting number of items for this memory
     wire [5:0] items02;          // starting number of items for this memory
@@ -103,6 +105,7 @@ module mem_readout_tb1;
         //.reset(reset),              // synchronously negated active-hi reset
         .reset(new_event),      // start over
         .BX(BX),                    // BX number
+        .first_clk(first_clk),
         //.clk_cnt(clk_cnt),          // clock cylces gone by in BX
         //.BX_pipe(BX_pipe),
         
@@ -122,18 +125,18 @@ module mem_readout_tb1;
         .number_in11(items10),          // starting number of items for this memory
         .number_in12(items11),          // starting number of items for this memory
     
-        .input_L1L2_1({9'hFFF,mem_dat00}),     
-        .input_L1L2_2({9'hFFF,mem_dat01}),     
-        .input_L1L2_3({9'hFFF,mem_dat02}),     
-        .input_L1L2_4({9'hFFF,mem_dat03}),     
-        .input_L3L4_1({9'hFFF,mem_dat04}),     
-        .input_L3L4_2({9'hFFF,mem_dat05}),     
-        .input_L3L4_3({9'hFFF,mem_dat06}),     
-        .input_L3L4_4({9'hFFF,mem_dat07}),  
-        .input_L5L6_1({9'hFFF,mem_dat08}),
-        .input_L5L6_2({9'hFFF,mem_dat09}),
-        .input_L5L6_3({9'hFFF,mem_dat10}),
-        .input_L5L6_4({9'hFFF,mem_dat11}),   
+        .input_L1L2_1({10'hFFF,mem_dat00[44:1]}),     
+        .input_L1L2_2({10'hFFF,mem_dat01[44:1]}),     
+        .input_L1L2_3({10'hFFF,mem_dat02[44:1]}),     
+        .input_L1L2_4({10'hFFF,mem_dat03[44:1]}),     
+        .input_L3L4_1({10'hFFF,mem_dat04[44:1]}),     
+        .input_L3L4_2({10'hFFF,mem_dat05[44:1]}),     
+        .input_L3L4_3({10'hFFF,mem_dat06[44:1]}),     
+        .input_L3L4_4({10'hFFF,mem_dat07[44:1]}),  
+        .input_L5L6_1({10'hFFF,mem_dat08[44:1]}),
+        .input_L5L6_2({10'hFFF,mem_dat09[44:1]}),
+        .input_L5L6_3({10'hFFF,mem_dat10[44:1]}),
+        .input_L5L6_4({10'hFFF,mem_dat11[44:1]}),   
     
         .read_add1(addr00),          // lower part of memory address
         .read_add2(addr01),          // lower part of memory address
@@ -236,6 +239,7 @@ module mem_readout_tb1;
 
 	initial begin
 		// Initialize Inputs
+		first_clk = 1'b1;
 		clk = 0;
 		BX = 3'b0;
 		clk_cnt = 7'b0;
@@ -338,6 +342,8 @@ module mem_readout_tb1;
 
     //Make the memory read the next address every clock period
     always @ (posedge clk) begin
+        first_clk <= 1'b0;
+       
         read_addr00 <= addr00;
         read_addr01 <= addr01;
         read_addr02 <= addr02;

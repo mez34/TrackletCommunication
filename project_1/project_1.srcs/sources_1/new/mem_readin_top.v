@@ -22,7 +22,7 @@
 module mem_readin_top(
     input clk,                      // main clock
     input reset,                // start over
-    input [53:0] data_residuals,    // data out from neighboring sector, from FIFO (would be residuals)
+    input [47:0] data_residuals,    // data out from neighboring sector, from FIFO (would be residuals)
     input datanull,                  // when FIFO is empty data is not valid
     
     output reg [53:0] output_L1L2_1,
@@ -42,7 +42,7 @@ module mem_readin_top(
     reg [3:0] memory_addr;
     reg [4:0] write_addr;
     reg new_event_dly1, new_event_dly2;
-    reg [53:0] data_residuals_dly1;
+    reg [47:0] data_residuals_dly1;
     reg datanull_dly;
     
     reg valid;
@@ -126,7 +126,7 @@ module mem_readin_top(
             // use the 4 bits containing memory information and set a write enable for the memory it should be sent to
             // also increment the write_addr for that memory so that data does not overwrite itself 
             // increment num_items for that memory (counter for how many residuals data has
-            case (data_residuals[48:45])
+            case (data_residuals[47:44])
                  4'b0001: begin 
                     //output_L1L2_1 <= data_residuals_dly1[53:0];
                     wr_en_mem00 <= 1'b1;
@@ -375,18 +375,18 @@ module mem_readin_top(
     end
 
     always @ (posedge clk) begin  //make a data stream for each memory
-        if (wr_en_mem00) output_L1L2_1 <= data_residuals_dly1;
-        if (wr_en_mem01) output_L1L2_2 <= data_residuals_dly1;
-        if (wr_en_mem02) output_L1L2_3 <= data_residuals_dly1;
-        if (wr_en_mem03) output_L1L2_4 <= data_residuals_dly1;
-        if (wr_en_mem04) output_L3L4_1 <= data_residuals_dly1;
-        if (wr_en_mem05) output_L3L4_2 <= data_residuals_dly1;
-        if (wr_en_mem06) output_L3L4_3 <= data_residuals_dly1;
-        if (wr_en_mem07) output_L3L4_4 <= data_residuals_dly1;
-        if (wr_en_mem08) output_L5L6_1 <= data_residuals_dly1;
-        if (wr_en_mem09) output_L5L6_2 <= data_residuals_dly1;
-        if (wr_en_mem10) output_L5L6_3 <= data_residuals_dly1;
-        if (wr_en_mem11) output_L5L6_4 <= data_residuals_dly1;
+        if (wr_en_mem00) output_L1L2_1 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem01) output_L1L2_2 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem02) output_L1L2_3 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem03) output_L1L2_4 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem04) output_L3L4_1 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem05) output_L3L4_2 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem06) output_L3L4_3 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem07) output_L3L4_4 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem08) output_L5L6_1 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem09) output_L5L6_2 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem10) output_L5L6_3 <= {10'hFFF,data_residuals_dly1};
+        if (wr_en_mem11) output_L5L6_4 <= {10'hFFF,data_residuals_dly1};
     end
 
     always @ (posedge clk) begin

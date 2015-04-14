@@ -38,7 +38,7 @@ module ProjTransceiver(
     //output wire io_rd_ack, // 'read' data from this module is ready
     //clocks
     input wire [2:0] BX,
-    //input wire first_clk,
+    input wire first_clk,
     //input wire not_first_clk,
     input start,
     output reg done,
@@ -104,9 +104,9 @@ wire done_sending_proj;
 
 wire valid;
 reg valid_dly;
-wire [53:0] mem_dat_stream; //priority encoded data stream from the 12 memories
-reg [53:0] mem_dat_stream_dly;
-wire [53:0] data_output;    //same memory stream but now coming from the FIFO
+wire [47:0] mem_dat_stream; //priority encoded data stream from the 12 memories
+reg [47:0] mem_dat_stream_dly;
+wire [47:0] data_output;    //same memory stream but now coming from the FIFO
 
     // FIFO internal outputs
     reg fifo_rst;                // reset fifo after each new_event
@@ -114,6 +114,7 @@ wire [53:0] data_output;    //same memory stream but now coming from the FIFO
     reg fifo_rst2;               // hold fifo reset
     reg fifo_rst3;               // hold fifo reset
     reg fifo_rst4;               // hold fifo reset
+    reg fifo_rst5;               // hold fifo reset
     reg FIFO_wr_en;              // FIFO write enable from valid
     reg FIFO_rd_en;              // FIFO read enable (always valid after reset)
     wire FIFO_EMPTY,FIFO_FULL;
@@ -121,7 +122,7 @@ wire [53:0] data_output;    //same memory stream but now coming from the FIFO
 
 mem_readout_top send_proj(
     .clk(clk),                  // main clock
-    .reset(fifo_rst4),              // synchronously negated active-hi reset
+    .reset(fifo_rst5),              // synchronously negated active-hi reset
     .BX(BX),                    // BX number
     .clk_cnt(clk_cnt),          // clock cylces gone by in BX
     .BX_pipe(BX_pipe),
@@ -139,18 +140,18 @@ mem_readout_top send_proj(
     .number_in11(number_in11),          // starting number of items for this memory
     .number_in12(number_in12),          // starting number of items for this memory
     
-    .input_L1L2_1(input_L1L2_1),     
-    .input_L1L2_2(input_L1L2_2),     
-    .input_L1L2_3(input_L1L2_3),     
-    .input_L1L2_4(input_L1L2_4),     
-    .input_L3L4_1(input_L3L4_1),     
-    .input_L3L4_2(input_L3L4_2),     
-    .input_L3L4_3(input_L3L4_3),     
-    .input_L3L4_4(input_L3L4_4),  
-    .input_L5L6_1(input_L5L6_1),
-    .input_L5L6_2(input_L5L6_2),
-    .input_L5L6_3(input_L5L6_3),
-    .input_L5L6_4(input_L5L6_4),   
+    .input_L1L2_1(input_L1L2_1[43:0]),     
+    .input_L1L2_2(input_L1L2_2[43:0]),     
+    .input_L1L2_3(input_L1L2_3[43:0]),     
+    .input_L1L2_4(input_L1L2_4[43:0]),     
+    .input_L3L4_1(input_L3L4_1[43:0]),     
+    .input_L3L4_2(input_L3L4_2[43:0]),     
+    .input_L3L4_3(input_L3L4_3[43:0]),     
+    .input_L3L4_4(input_L3L4_4[43:0]),  
+    .input_L5L6_1(input_L5L6_1[43:0]),
+    .input_L5L6_2(input_L5L6_2[43:0]),
+    .input_L5L6_3(input_L5L6_3[43:0]),
+    .input_L5L6_4(input_L5L6_4[43:0]),   
     
     .read_add1(read_add1),          // lower part of memory address
     .read_add2(read_add2),          // lower part of memory address
@@ -170,16 +171,22 @@ mem_readout_top send_proj(
     .send_BX(send_BX),
     .none(done_sending_proj)                 // no more items
 );
-
+reg fifo_rst_dly1;
+reg fifo_rst_dly2;
 always @ (posedge clk) begin
+    //if (first_clk) FIFO_wr_en <= 1'b0;
     fifo_rst1 <= reset;
     fifo_rst2 <= fifo_rst1;
     fifo_rst3 <= fifo_rst2;
     fifo_rst4 <= fifo_rst3;
-    fifo_rst <= ( reset || fifo_rst1 || fifo_rst2 || fifo_rst3 || fifo_rst4 );
+    fifo_rst5 <= fifo_rst4;
+    fifo_rst <= ( reset || fifo_rst1 || fifo_rst2 || fifo_rst3 || fifo_rst4 || fifo_rst5 );
+    fifo_rst_dly1 <= fifo_rst;
+    fifo_rst_dly2 <= fifo_rst_dly1;
     valid_dly <= valid;
-    FIFO_wr_en <= ( valid_dly || send_BX);        //delay on the valid signal because data is off by one clock tick
-    FIFO_rd_en <= !fifo_rst;
+    FIFO_wr_en <= (valid_dly || send_BX);        //delay on the valid signal because data is off by one clock tick
+   // if (!first_clk) FIFO_wr_en <= (valid_dly || send_BX);        //delay on the valid signal because data is off by one clock tick
+    FIFO_rd_en <= (!fifo_rst && !fifo_rst_dly1 && !fifo_rst_dly2);
     mem_dat_stream_dly <= mem_dat_stream;
 end
 
@@ -189,10 +196,10 @@ end
         .rst(fifo_rst),                             // 1 bit in data reset
         .wr_clk(clk),                               // 1 bit in write clock
         .rd_clk(clk),                               // 1 bit in read clock
-        .din(mem_dat_stream_dly),                       // 54 bit in data into FIFO
+        .din(mem_dat_stream_dly),                   // 48 bit in data into FIFO
         .wr_en(FIFO_wr_en),                         // 1 bit in write enable
         .rd_en(FIFO_rd_en),                         // 1 bit in read enable
-        .dout(data_output),                         // 54 bit out data out of FIFO
+        .dout(data_output),                         // 48 bit out data out of FIFO
         .full(FIFO_FULL),                           // 1 bit out FIFO full signal
         .empty(FIFO_EMPTY)                          // 1 bit out FIFO empty signal
       );
@@ -200,7 +207,7 @@ end
 
     mem_readin_top get_resid(
         .clk(clk),
-        .reset(fifo_rst4),
+        .reset(fifo_rst5),
         .data_residuals(data_output),
         .datanull(FIFO_EMPTY),
         
