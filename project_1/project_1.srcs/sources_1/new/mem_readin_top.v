@@ -25,6 +25,9 @@ module mem_readin_top(
     input [47:0] data_residuals,    // data out from neighboring sector, from FIFO (would be residuals)
     input datanull,                  // when FIFO is empty data is not valid
     
+    output reg [3:0] output_BX,
+    output reg send_BX,
+    
     output reg [53:0] output_L1L2_1,
     output reg [53:0] output_L1L2_2,
     output reg [53:0] output_L1L2_3,
@@ -68,6 +71,7 @@ module mem_readin_top(
         
     always @ (posedge clk) begin
         if (new_event_dly2) begin // initialize variables 
+            send_BX <= 1'b0;
             // set all item counters to zero
             num_items00 <= 6'b0;
             num_items01 <= 6'b0;
@@ -127,6 +131,21 @@ module mem_readin_top(
             // also increment the write_addr for that memory so that data does not overwrite itself 
             // increment num_items for that memory (counter for how many residuals data has
             case (data_residuals[47:44])
+                 4'b1111: begin
+                     send_BX <= 1'b1;
+                     wr_en_mem00 <= 1'b0;
+                     wr_en_mem01 <= 1'b0;
+                     wr_en_mem02 <= 1'b0;
+                     wr_en_mem03 <= 1'b0;
+                     wr_en_mem04 <= 1'b0;
+                     wr_en_mem05 <= 1'b0;
+                     wr_en_mem06 <= 1'b0;
+                     wr_en_mem07 <= 1'b0;
+                     wr_en_mem08 <= 1'b0;
+                     wr_en_mem09 <= 1'b0;
+                     wr_en_mem10 <= 1'b0;
+                     wr_en_mem11 <= 1'b0;
+                 end
                  4'b0001: begin 
                     //output_L1L2_1 <= data_residuals_dly1[53:0];
                     wr_en_mem00 <= 1'b1;
@@ -144,6 +163,7 @@ module mem_readin_top(
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b0010: begin
                     wr_en_mem01 <= 1'b1;
@@ -161,6 +181,7 @@ module mem_readin_top(
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b0011: begin
                     wr_en_mem02 <= 1'b1;
@@ -178,6 +199,7 @@ module mem_readin_top(
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b0100: begin
                     wr_en_mem03 <= 1'b1;
@@ -195,6 +217,7 @@ module mem_readin_top(
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b0101: begin
                     wr_en_mem04 <= 1'b1;
@@ -212,6 +235,7 @@ module mem_readin_top(
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b0110: begin
                     wr_en_mem05 <= 1'b1;
@@ -229,6 +253,7 @@ module mem_readin_top(
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b0111: begin
                     wr_en_mem06 <= 1'b1;
@@ -246,6 +271,7 @@ module mem_readin_top(
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b1000: begin
                     wr_en_mem07 <= 1'b1;
@@ -263,6 +289,7 @@ module mem_readin_top(
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b1001: begin
                     wr_en_mem08 <= 1'b1;
@@ -280,6 +307,7 @@ module mem_readin_top(
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b1010: begin
                     wr_en_mem09 <= 1'b1;
@@ -297,6 +325,7 @@ module mem_readin_top(
                     wr_en_mem08 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b1011: begin
                     wr_en_mem10 <= 1'b1;
@@ -314,6 +343,7 @@ module mem_readin_top(
                     wr_en_mem08 <= 1'b0;
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem11 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  4'b1100: begin
                     wr_en_mem11 <= 1'b1;
@@ -331,8 +361,10 @@ module mem_readin_top(
                     wr_en_mem08 <= 1'b0;
                     wr_en_mem09 <= 1'b0;
                     wr_en_mem10 <= 1'b0;
+                    send_BX <= 1'b0;
                  end
                  default begin
+                    send_BX <= 1'b0;
                     num_items00 <= 6'b0;
                     num_items01 <= 6'b0;
                     num_items02 <= 6'b0;
@@ -375,18 +407,19 @@ module mem_readin_top(
     end
 
     always @ (posedge clk) begin  //make a data stream for each memory
-        if (wr_en_mem00) output_L1L2_1 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem01) output_L1L2_2 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem02) output_L1L2_3 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem03) output_L1L2_4 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem04) output_L3L4_1 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem05) output_L3L4_2 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem06) output_L3L4_3 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem07) output_L3L4_4 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem08) output_L5L6_1 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem09) output_L5L6_2 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem10) output_L5L6_3 <= {10'hFFF,data_residuals_dly1};
-        if (wr_en_mem11) output_L5L6_4 <= {10'hFFF,data_residuals_dly1};
+        if (send_BX) output_BX <= data_residuals_dly1[44:42];
+        if (wr_en_mem00) output_L1L2_1 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem01) output_L1L2_2 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem02) output_L1L2_3 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem03) output_L1L2_4 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem04) output_L3L4_1 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem05) output_L3L4_2 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem06) output_L3L4_3 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem07) output_L3L4_4 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem08) output_L5L6_1 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem09) output_L5L6_2 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem10) output_L5L6_3 <= {10'hFFF,data_residuals_dly1[43:0]};
+        if (wr_en_mem11) output_L5L6_4 <= {10'hFFF,data_residuals_dly1[43:0]};
     end
 
     always @ (posedge clk) begin
