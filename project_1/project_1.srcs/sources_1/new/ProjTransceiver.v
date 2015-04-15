@@ -171,6 +171,25 @@ mem_readout_top send_proj(
     .send_BX(send_BX),
     .none(done_sending_proj)                 // no more items
 );
+
+    /* always @ (posedge clk) begin
+        read_addr00 <= addr00;
+        read_addr01 <= addr01;
+        read_addr02 <= addr02;
+        read_addr03 <= addr03;
+        read_addr04 <= addr04;
+        read_addr05 <= addr05;
+        read_addr06 <= addr06;
+        read_addr07 <= addr07;
+        read_addr08 <= addr08;
+        read_addr09 <= addr09;
+        read_addr10 <= addr10;
+        read_addr11 <= addr11;    
+    end */
+
+
+
+
 reg fifo_rst_dly1;
 reg fifo_rst_dly2;
 always @ (posedge clk) begin
