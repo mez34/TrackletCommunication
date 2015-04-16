@@ -106,8 +106,10 @@ module ProjTransceiver(
     reg valid_dly;
     wire [47:0] mem_dat_stream; //priority encoded data stream from the 12 memories
     reg [47:0] mem_dat_stream_dly;
-    wire [47:0] data_output;    //same memory stream but now coming from the FIFO
-
+    wire [47:0] data_output_fifo1;    //same memory stream but now coming from the 1st FIFO
+    reg [47:0] data_output_fifo1_dly;
+    wire [47:0] data_output_fifo2;    //same memory stream but not coming from the 2nd FIFO
+    
     wire [3:0] output_BX;
     wire sent_BX;
 
@@ -122,7 +124,11 @@ module ProjTransceiver(
     reg FIFO_rd_en;              // FIFO read enable (always valid after reset)
     reg fifo_rst_dly1;
     reg fifo_rst_dly2;
-    wire FIFO_EMPTY,FIFO_FULL;
+    wire FIFO1_EMPTY,FIFO1_FULL;
+    
+    //2nd FIFO internal connects
+    reg FIFO_wr_en_2;
+    wire FIFO2_EMPTY,FIFO2_FULL;
 
 
     mem_readout_top send_proj(
@@ -209,28 +215,45 @@ module ProjTransceiver(
        // if (!first_clk) FIFO_wr_en <= (valid_dly || send_BX);        //delay on the valid signal because data is off by one clock tick
         FIFO_rd_en <= (!fifo_rst && !fifo_rst_dly1 && !fifo_rst_dly2);
         mem_dat_stream_dly <= mem_dat_stream;
+        data_output_fifo1_dly <= data_output_fifo1;
+        
+        if ( data_output_fifo1[47:44] != 4'b0000 ) FIFO_wr_en_2 <= 1'b1;
+        else FIFO_wr_en_2 <= 1'b0;
     end
 
     /////////////////////////////////////////////////////////////////////
     // send the mem_dat_stream to a dualclock FIFO
-    fifo_projection_out fifo(
+    fifo_projection_out fifo1(
         .rst(fifo_rst),                             // 1 bit in data reset
         .wr_clk(clk),                               // 1 bit in write clock
         .rd_clk(clk),                               // 1 bit in read clock
         .din(mem_dat_stream_dly),                   // 48 bit in data into FIFO
         .wr_en(FIFO_wr_en),                         // 1 bit in write enable
         .rd_en(FIFO_rd_en),                         // 1 bit in read enable
-        .dout(data_output),                         // 48 bit out data out of FIFO
-        .full(FIFO_FULL),                           // 1 bit out FIFO full signal
-        .empty(FIFO_EMPTY)                          // 1 bit out FIFO empty signal
-      );
+        .dout(data_output_fifo1),                         // 48 bit out data out of FIFO
+        .full(FIFO1_FULL),                           // 1 bit out FIFO full signal
+        .empty(FIFO1_EMPTY)                          // 1 bit out FIFO empty signal
+     );
+      
+     fifo_projection_out fifo2(
+         .rst(fifo_rst),                             // 1 bit in data reset
+         .wr_clk(clk),                               // 1 bit in write clock
+         .rd_clk(clk),                               // 1 bit in read clock
+         .din(data_output_fifo1_dly),               // 48 bit in data into FIFO
+         .wr_en(FIFO_wr_en_2),                       // 1 bit in write enable
+         .rd_en(FIFO_rd_en),                         // 1 bit in read enable
+         .dout(data_output_fifo2),                   // 48 bit out data out of FIFO
+         .full(FIFO2_FULL),                          // 1 bit out FIFO full signal
+         .empty(FIFO2_EMPTY)                         // 1 bit out FIFO empty signal
+      );      
+
 
 
     mem_readin_top get_resid(
         .clk(clk),
         .reset(reset),
-        .data_residuals(data_output),
-        .datanull(FIFO_EMPTY),
+        .data_residuals(data_output_fifo2),
+        .datanull(FIFO2_EMPTY),
         
         .output_BX(output_BX),
         .send_BX(BX_sent),
