@@ -22,8 +22,8 @@
 `timescale 1ns / 1ps
 
 module mem_readout_top(
-    input clk,                    // main clock
-    input reset,              // start over
+    input clk,                     // main clock
+    input reset,                   // start over
     input wire [2:0] BX,           // store BX
     input [6:0] clk_cnt,           // counter for # of clock cycles in processing BX
     input [2:0] BX_pipe,           // if clk_cnt reaches 7'b1, increment BX_pipe
