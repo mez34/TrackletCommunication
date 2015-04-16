@@ -127,7 +127,7 @@ module ProjTransceiver(
 
     mem_readout_top send_proj(
         .clk(clk),                  // main clock
-        .reset(fifo_rst5),              // synchronously negated active-hi reset
+        .reset(reset),              // synchronously negated active-hi reset
         .BX(BX),                    // BX number
         .clk_cnt(clk_cnt),          // clock cylces gone by in BX
         .BX_pipe(BX_pipe),
@@ -196,12 +196,12 @@ module ProjTransceiver(
 
     always @ (posedge clk) begin
         //if (first_clk) FIFO_wr_en <= 1'b0;
-        fifo_rst1 <= reset;
+        fifo_rst1 <= first_clk;
         fifo_rst2 <= fifo_rst1;
         fifo_rst3 <= fifo_rst2;
         fifo_rst4 <= fifo_rst3;
         fifo_rst5 <= fifo_rst4;
-        fifo_rst <= ( reset || fifo_rst1 || fifo_rst2 || fifo_rst3 || fifo_rst4 || fifo_rst5 );
+        fifo_rst <= ( first_clk || fifo_rst1 || fifo_rst2 || fifo_rst3 || fifo_rst4 || fifo_rst5 );
         fifo_rst_dly1 <= fifo_rst;
         fifo_rst_dly2 <= fifo_rst_dly1;
         valid_dly <= valid;
@@ -228,7 +228,7 @@ module ProjTransceiver(
 
     mem_readin_top get_resid(
         .clk(clk),
-        .reset(fifo_rst5),
+        .reset(reset),
         .data_residuals(data_output),
         .datanull(FIFO_EMPTY),
         
