@@ -107,6 +107,9 @@ module ProjTransceiver(
     wire [47:0] mem_dat_stream; //priority encoded data stream from the 12 memories
     reg [47:0] mem_dat_stream_dly;
     wire [47:0] data_output_fifo1;    //same memory stream but now coming from the 1st FIFO
+    
+    wire [15:0] chopped_data;
+    
     reg [47:0] data_output_fifo1_dly;
     wire [47:0] data_output_fifo2;    //same memory stream but not coming from the 2nd FIFO
     
@@ -234,6 +237,15 @@ module ProjTransceiver(
         .full(FIFO1_FULL),                           // 1 bit out FIFO full signal
         .empty(FIFO1_EMPTY)                          // 1 bit out FIFO empty signal
      );
+      
+     chop_data_stream make16bits(
+        .clk(clk),
+        .reset(reset),
+        .no_data(FIFO1_EMPTY),
+        .data_in(data_output_fifo1),
+        .data_out(chopped_data)
+     );
+      
       
      fifo_projection_out fifo2(
          .rst(fifo_rst),                             // 1 bit in data reset
