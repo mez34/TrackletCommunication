@@ -2,7 +2,7 @@
 
 `timescale 1ns / 1ps
 
-module prio_support(
+module prio_support_2(
     // Inputs:
     input clk,
     input [5:0] initial_count,  // initial number of items in memory
@@ -42,6 +42,11 @@ always @ (posedge clk) begin
     valid <= count_en;
 end
 
+
+    always @ (posedge clk) begin  
+        $display("number_in1 at PRIO_SUPPORT = %h", initial_count);
+        $display("number_in1 after loading = %h", item_cntr);
+    end 
 //////////////////////////////////////////////////////////////////////////
 // address counter, gets cleared by 'init', counts up
 always @ (posedge clk) begin
