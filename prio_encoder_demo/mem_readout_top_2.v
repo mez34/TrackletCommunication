@@ -21,7 +21,7 @@
  
 `timescale 1ns / 1ps
 
-module mem_readout_top(
+module mem_readout_top_2(
     input clk,                     // main clock
     input reset,                   // start over
     input wire [2:0] BX,           // store BX
@@ -103,35 +103,35 @@ end
 assign setup = reset | new_event_dly1 | new_event_dly2;
 
 // connect address and item counters, as well as comparitors, for each memory
-prio_support prio_support00(.clk(clk), .initial_count(number_in1), .init(reset), .sel(sel00), 
+prio_support_2 prio_support00(.clk(clk), .initial_count(number_in1), .init(reset), .sel(sel00), 
     .setup(setup), .addr(read_add1[5:0]), .has_dat(has_dat00), .valid(valid00));
-prio_support prio_support01(.clk(clk), .initial_count(number_in2), .init(reset), .sel(sel01), 
+prio_support_2 prio_support01(.clk(clk), .initial_count(number_in2), .init(reset), .sel(sel01), 
     .setup(setup), .addr(read_add2[5:0]), .has_dat(has_dat01), .valid(valid01));
-prio_support prio_support02(.clk(clk), .initial_count(number_in3), .init(reset), .sel(sel02), 
+prio_support_2 prio_support02(.clk(clk), .initial_count(number_in3), .init(reset), .sel(sel02), 
     .setup(setup), .addr(read_add3[5:0]), .has_dat(has_dat02), .valid(valid02));
-prio_support prio_support03(.clk(clk), .initial_count(number_in4), .init(reset), .sel(sel03), 
+prio_support_2 prio_support03(.clk(clk), .initial_count(number_in4), .init(reset), .sel(sel03), 
     .setup(setup), .addr(read_add4[5:0]), .has_dat(has_dat03), .valid(valid03));
-prio_support prio_support04(.clk(clk), .initial_count(number_in5), .init(reset), .sel(sel04), 
+prio_support_2 prio_support04(.clk(clk), .initial_count(number_in5), .init(reset), .sel(sel04), 
     .setup(setup), .addr(read_add5[5:0]), .has_dat(has_dat04), .valid(valid04));
-prio_support prio_support05(.clk(clk), .initial_count(number_in6), .init(reset), .sel(sel05), 
+prio_support_2 prio_support05(.clk(clk), .initial_count(number_in6), .init(reset), .sel(sel05), 
     .setup(setup), .addr(read_add6[5:0]), .has_dat(has_dat05), .valid(valid05));
-prio_support prio_support06(.clk(clk), .initial_count(number_in7), .init(reset), .sel(sel06), 
+prio_support_2 prio_support06(.clk(clk), .initial_count(number_in7), .init(reset), .sel(sel06), 
     .setup(setup), .addr(read_add7[5:0]), .has_dat(has_dat06), .valid(valid06));
-prio_support prio_support07(.clk(clk), .initial_count(number_in8), .init(reset), .sel(sel07), 
+prio_support_2 prio_support07(.clk(clk), .initial_count(number_in8), .init(reset), .sel(sel07), 
     .setup(setup), .addr(read_add8[5:0]), .has_dat(has_dat07), .valid(valid07));
-prio_support prio_support08(.clk(clk), .initial_count(number_in9), .init(reset), .sel(sel08), 
+prio_support_2 prio_support08(.clk(clk), .initial_count(number_in9), .init(reset), .sel(sel08), 
     .setup(setup), .addr(read_add9[5:0]), .has_dat(has_dat08), .valid(valid08));
-prio_support prio_support09(.clk(clk), .initial_count(number_in10), .init(reset), .sel(sel09), 
+prio_support_2 prio_support09(.clk(clk), .initial_count(number_in10), .init(reset), .sel(sel09), 
     .setup(setup), .addr(read_add10[5:0]), .has_dat(has_dat09), .valid(valid09));
-prio_support prio_support10(.clk(clk), .initial_count(number_in11), .init(reset), .sel(sel10), 
+prio_support_2 prio_support10(.clk(clk), .initial_count(number_in11), .init(reset), .sel(sel10), 
     .setup(setup), .addr(read_add11[5:0]), .has_dat(has_dat10), .valid(valid10));
-prio_support prio_support11(.clk(clk), .initial_count(number_in12), .init(reset), .sel(sel11), 
+prio_support_2 prio_support11(.clk(clk), .initial_count(number_in12), .init(reset), .sel(sel11), 
     .setup(setup), .addr(read_add12[5:0]), .has_dat(has_dat11), .valid(valid11));
        
  
 //////////////////////////////////////////////////////////////////////////////////
 // connect the priority encoder the will access the next memory that has data
-prio_encoder prio_encoder (
+prio_encoder_2 prio_encoder(
     // Inputs:
     .clk(clk),
     .first_dat(reset),
@@ -167,7 +167,7 @@ prio_encoder prio_encoder (
 
 //////////////////////////////////////////////////////////////////////////////////
 // connect a mux to merge the data streams
-mem_mux mem_mux(
+mem_mux_2 mem_mux(
     .clk(clk),
     .BX(BX),
     .sel(sel[3:0]),   // binary encoded

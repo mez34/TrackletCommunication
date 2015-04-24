@@ -3,7 +3,7 @@
 
 `timescale 1ns / 1ps
 
-module prio_encoder(
+module prio_encoder_2(
     // Inputs:
     input clk,
     input first_dat,

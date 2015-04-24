@@ -2,7 +2,7 @@
 
 `timescale 1ns / 1ps
 
-module mem_mux(
+module mem_mux_2(
     input clk,
     input [2:0] BX,
     input [3:0] sel,   // binary encoded

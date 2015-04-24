@@ -2,7 +2,7 @@
 
 `timescale 1ns / 1ps
 
-module prio_support(
+module prio_support_2(
     // Inputs:
     input clk,
     input [5:0] initial_count,  // initial number of items in memory

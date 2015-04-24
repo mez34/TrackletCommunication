@@ -131,7 +131,7 @@ module ProjTransceiver(
     wire FIFO2_EMPTY,FIFO2_FULL;
 
 
-    mem_readout_top send_proj(
+    mem_readout_top_2 send_proj(
         .clk(clk),                  // main clock
         .reset(reset),              // synchronously negated active-hi reset
         .BX(BX),                    // BX number
