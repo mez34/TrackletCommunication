@@ -38,7 +38,7 @@ module ProjTransceiver(
     //output wire io_rd_ack, // 'read' data from this module is ready
     //clocks
     input wire [2:0] BX,
-    input wire first_clk,
+    input wire first_clk,   // actual reset
     //input wire not_first_clk,
     input start,
     output reg done,
@@ -133,7 +133,7 @@ module ProjTransceiver(
 
     mem_readout_top_2 send_proj(
         .clk(clk),                  // main clock
-        .reset(reset),              // synchronously negated active-hi reset
+        .reset(reset),              // synchronously negated active-hi reset  RESET IS ACTUALLY START OF BX
         .BX(BX),                    // BX number
         .clk_cnt(clk_cnt),          // clock cylces gone by in BX
         .BX_pipe(BX_pipe),
@@ -182,22 +182,6 @@ module ProjTransceiver(
         .send_BX(send_BX),
         .none(done_sending_proj)                 // no more items
     );
-
-    /* always @ (posedge clk) begin
-        read_addr00 <= addr00;
-        read_addr01 <= addr01;
-        read_addr02 <= addr02;
-        read_addr03 <= addr03;
-        read_addr04 <= addr04;
-        read_addr05 <= addr05;
-        read_addr06 <= addr06;
-        read_addr07 <= addr07;
-        read_addr08 <= addr08;
-        read_addr09 <= addr09;
-        read_addr10 <= addr10;
-        read_addr11 <= addr11;    
-    end */
-
 
 
     always @ (posedge clk) begin
@@ -331,19 +315,6 @@ module ProjTransceiver(
         test_hold8 <= test_hold7;
         test_hold9 <= test_hold8;
     end
-    
-    /*assign output_L1L2_1 = test_hold9 + 1;
-    assign output_L1L2_2 = test_hold9 + 2;
-    assign output_L1L2_3 = test_hold9 + 3;
-    assign output_L1L2_4 = test_hold9 + 4;
-    assign output_L3L4_1 = test_hold9 + 5;
-    assign output_L3L4_2 = test_hold9 + 6;
-    assign output_L3L4_3 = test_hold9 + 7;
-    assign output_L3L4_4 = test_hold9 + 8;
-    assign output_L5L6_1 = test_hold9 + 9;
-    assign output_L5L6_2 = test_hold9 + 10;
-    assign output_L5L6_3 = test_hold9 + 11;
-    assign output_L5L6_4 = test_hold9 + 12;*/
     
 
 endmodule
