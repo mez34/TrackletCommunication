@@ -286,58 +286,58 @@ module mem_readout_tb1;
 
     /////////////////////////////////////////////////////////////
     // read in input data
-    memory #(45,5,"/home/user/project_1/testdata0.txt") getMemDat00( .output_data(mem_dat00), .clock(clk),
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata0.txt") getMemDat00( .output_data(mem_dat00), .clock(clk),
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr00), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata1.txt") getMemDat01( .output_data(mem_dat01), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata1.txt") getMemDat01( .output_data(mem_dat01), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr01), .input_data(45'b0) );         
-    memory #(45,5,"/home/user/project_1/testdata2.txt") getMemDat02( .output_data(mem_dat02), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata2.txt") getMemDat02( .output_data(mem_dat02), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr02), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata3.txt") getMemDat03( .output_data(mem_dat03), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata3.txt") getMemDat03( .output_data(mem_dat03), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr03), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata4.txt") getMemDat04( .output_data(mem_dat04), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata4.txt") getMemDat04( .output_data(mem_dat04), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr04), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata5.txt") getMemDat05( .output_data(mem_dat05), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata5.txt") getMemDat05( .output_data(mem_dat05), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr05), .input_data(45'b0) );         
-    memory #(45,5,"/home/user/project_1/testdata6.txt") getMemDat06( .output_data(mem_dat06), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata6.txt") getMemDat06( .output_data(mem_dat06), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr06), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata7.txt") getMemDat07( .output_data(mem_dat07), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata7.txt") getMemDat07( .output_data(mem_dat07), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr07), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata8.txt") getMemDat08( .output_data(mem_dat08), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata8.txt") getMemDat08( .output_data(mem_dat08), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr08), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata9.txt") getMemDat09( .output_data(mem_dat09), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata9.txt") getMemDat09( .output_data(mem_dat09), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr09), .input_data(45'b0) );         
-    memory #(45,5,"/home/user/project_1/testdata10.txt") getMemDat10( .output_data(mem_dat10), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata10.txt") getMemDat10( .output_data(mem_dat10), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr10), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata11.txt") getMemDat11( .output_data(mem_dat11), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata11.txt") getMemDat11( .output_data(mem_dat11), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(read_addr11), .input_data(45'b0) );
       
     //numItems count00(.num_items(items00), .clock(clk) );
         
     //count the number of items in the data 
     //number of items is stored in the nitems_addr which is the last line in the RAM
-    memory #(45,5,"/home/user/project_1/testdata0.txt") getNumItems00( .output_data(items00), .clock(clk),
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata0.txt") getNumItems00( .output_data(items00), .clock(clk),
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata1.txt") getNumItems01( .output_data(items01), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata1.txt") getNumItems01( .output_data(items01), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );         
-    memory #(45,5,"/home/user/project_1/testdata2.txt") getNumItems02( .output_data(items02), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata2.txt") getNumItems02( .output_data(items02), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata3.txt") getNumItems03( .output_data(items03), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata3.txt") getNumItems03( .output_data(items03), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata4.txt") getNumItems04( .output_data(items04), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata4.txt") getNumItems04( .output_data(items04), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata5.txt") getNumItems05( .output_data(items05), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata5.txt") getNumItems05( .output_data(items05), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );         
-    memory #(45,5,"/home/user/project_1/testdata6.txt") getNumItems06( .output_data(items06), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata6.txt") getNumItems06( .output_data(items06), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata7.txt") getNumItems07( .output_data(items07), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata7.txt") getNumItems07( .output_data(items07), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata8.txt") getNumItems08( .output_data(items08), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata8.txt") getNumItems08( .output_data(items08), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata9.txt") getNumItems09( .output_data(items09), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata9.txt") getNumItems09( .output_data(items09), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );         
-    memory #(45,5,"/home/user/project_1/testdata10.txt") getNumItems10( .output_data(items10), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata10.txt") getNumItems10( .output_data(items10), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );
-    memory #(45,5,"/home/user/project_1/testdata11.txt") getNumItems11( .output_data(items11), .clock(clk), 
+    memory #(45,5,"/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata11.txt") getNumItems11( .output_data(items11), .clock(clk), 
         .write_address(5'b1), .write_enable(1'b0), .read_address(nitems_addr), .input_data(45'b0) );
 
     //Make the memory read the next address every clock period

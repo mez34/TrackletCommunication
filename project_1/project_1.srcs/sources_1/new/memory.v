@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module memory #(parameter RAM_WIDTH = 45, parameter RAM_ADDR_BITS=8, parameter INIT_FILE="/home/user/project_1/testdata.txt")(
+module memory #(parameter RAM_WIDTH = 45, parameter RAM_ADDR_BITS=8, parameter INIT_FILE="/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata.txt")(
     //output
     output reg [RAM_WIDTH-1:0] output_data,
     //inputs
@@ -30,7 +30,7 @@ module memory #(parameter RAM_WIDTH = 45, parameter RAM_ADDR_BITS=8, parameter I
     input wire [RAM_WIDTH-1:0] input_data
 );
 
-    //parameter INIT_FILE = "/home/user/project_1/testdata.txt";
+    //parameter INIT_FILE = "/home/Margaret/MargaretVC709/TrackletCommunication/project_1/testdata.txt";
 
 (* RAM_STYLE="block" *)
 reg [RAM_WIDTH-1:0] RAM [(2**RAM_ADDR_BITS)-1:0];
