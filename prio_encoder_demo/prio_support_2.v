@@ -42,11 +42,6 @@ always @ (posedge clk) begin
     valid <= count_en;
 end
 
-
-    always @ (posedge clk) begin  
-        $display("number_in1 at PRIO_SUPPORT = %h", initial_count);
-        $display("number_in1 after loading = %h", item_cntr);
-    end 
 //////////////////////////////////////////////////////////////////////////
 // address counter, gets cleared by 'init', counts up
 always @ (posedge clk) begin
