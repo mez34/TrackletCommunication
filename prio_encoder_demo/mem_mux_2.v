@@ -27,7 +27,7 @@ module mem_mux_2(
 // as compared to individual 'select' signals.
 always @ (posedge clk) begin
     case (sel[3:0])
-        4'b1111: mem_dat_stream <= {sel,44'b0};
+        4'b1111: mem_dat_stream <= {sel,BX,41'h00000000000};
         4'b0001: mem_dat_stream <= {sel,mem_dat00};
         4'b0010: mem_dat_stream <= {sel,mem_dat01};
         4'b0011: mem_dat_stream <= {sel,mem_dat02};
@@ -40,8 +40,29 @@ always @ (posedge clk) begin
         4'b1011: mem_dat_stream <= {sel,mem_dat09};
         4'b1100: mem_dat_stream <= {sel,mem_dat10};
         4'b1101: mem_dat_stream <= {sel,mem_dat11};
-        default  mem_dat_stream <= 48'b0;
+        default  mem_dat_stream <= 48'h000000000000;
     endcase
 end
+
+/*always @ (posedge clk) begin
+    case (sel[3:0])
+        4'b1111: mem_dat_stream <= {sel,44'h00000000000};
+        4'b0001: mem_dat_stream <= {sel,44'h00000000001};
+        4'b0010: mem_dat_stream <= {sel,44'h00000000002};
+        4'b0011: mem_dat_stream <= {sel,44'h00000000003};
+        4'b0100: mem_dat_stream <= {sel,44'h00000000004};
+        4'b0101: mem_dat_stream <= {sel,44'h00000000005};
+        4'b0110: mem_dat_stream <= {sel,44'h00000000006};
+        4'b0111: mem_dat_stream <= {sel,44'h00000000007};
+        4'b1000: mem_dat_stream <= {sel,44'h00000000008};
+        4'b1001: mem_dat_stream <= {sel,44'h00000000009};
+        4'b1011: mem_dat_stream <= {sel,44'h0000000000A};
+        4'b1100: mem_dat_stream <= {sel,44'h0000000000B};
+        4'b1101: mem_dat_stream <= {sel,44'h0000000000C};
+        default  mem_dat_stream <= 48'h000000000000;
+    endcase
+end*/
+
+
 
 endmodule
