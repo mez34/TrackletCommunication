@@ -22,8 +22,8 @@
 `timescale 1ns / 1ps
 
 module mem_readout_top_2(
-    input clk,                    // main clock
-    input reset,              // start over
+    input clk,                     // main clock
+    input reset,                   // start over
     input wire [2:0] BX,           // store BX
     input [6:0] clk_cnt,           // counter for # of clock cycles in processing BX
     input [2:0] BX_pipe,           // if clk_cnt reaches 7'b1, increment BX_pipe
@@ -39,9 +39,9 @@ module mem_readout_top_2(
     output wire [31:0] io_rd_data,    // data returned for read operations
     output wire io_rd_ack,                // 'read' data from this module is ready
     //clocks
-    input wire [2:0] BX,
+    input wire [2:0] BX,*/
     input wire first_clk,
-    input wire not_first_clk,*/
+    input wire not_first_clk,
  
     // A memory block
     input [5:0] number_in1,          // starting number of items for this memory
@@ -153,7 +153,8 @@ prio_support_2 prio_support11(.clk(clk), .initial_count(number_in12), .init(rese
 prio_encoder_2 prio_encoder (
     // Inputs:
     .clk(clk),
-    .first_dat(reset),
+    .first_dat(first_clk),
+    //.first_dat(reset),
     .has_dat00(has_dat00),
     .has_dat01(has_dat01),
     .has_dat02(has_dat02),
