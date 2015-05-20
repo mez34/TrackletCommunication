@@ -91,7 +91,23 @@ module ProjTransceiver(
     output [53:0] output_L5L6_1,
     output [53:0] output_L5L6_2,
     output [53:0] output_L5L6_3,
-    output [53:0] output_L5L6_4
+    output [53:0] output_L5L6_4,
+
+    output valid_L1L2_1,
+    output valid_L1L2_2,
+    output valid_L1L2_3,
+    output valid_L1L2_4,
+    output valid_L3L4_1,
+    output valid_L3L4_2,
+    output valid_L3L4_3,
+    output valid_L3L4_4,
+    output valid_L5L6_1,
+    output valid_L5L6_2,
+    output valid_L5L6_3,
+    output valid_L5L6_4
+
+
+
 );
 
 
@@ -246,7 +262,20 @@ module ProjTransceiver(
         .output_L5L6_1(output_L5L6_1), //returning residuals for this memory        
         .output_L5L6_2(output_L5L6_2), //returning residuals for this memory  
         .output_L5L6_3(output_L5L6_3), //returning residuals for this memory  
-        .output_L5L6_4(output_L5L6_4) //returning residuals for this memory 
+        .output_L5L6_4(output_L5L6_4), //returning residuals for this memory 
+
+	.valid_L1L2_1(wr_en_mem00), 	//valid signal for returning residuals
+	.valid_L1L2_2(wr_en_mem01), 	//valid signal for returning residuals
+	.valid_L1L2_3(wr_en_mem02), 	//valid signal for returning residuals
+	.valid_L1L2_4(wr_en_mem03), 	//valid signal for returning residuals
+	.valid_L3L4_1(wr_en_mem04), 	//valid signal for returning residuals
+	.valid_L3L4_2(wr_en_mem05), 	//valid signal for returning residuals
+	.valid_L3L4_3(wr_en_mem06), 	//valid signal for returning residuals
+	.valid_L3L4_4(wr_en_mem07), 	//valid signal for returning residuals
+	.valid_L5L6_1(wr_en_mem08), 	//valid signal for returning residuals
+	.valid_L5L6_2(wr_en_mem09), 	//valid signal for returning residuals
+	.valid_L5L6_3(wr_en_mem10), 	//valid signal for returning residuals
+	.valid_L5L6_4(wr_en_mem11) 	//valid signal for returning residuals
         
     );
 

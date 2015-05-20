@@ -39,7 +39,20 @@ module mem_readin_top(
     output reg [53:0] output_L5L6_1,
     output reg [53:0] output_L5L6_2,
     output reg [53:0] output_L5L6_3,
-    output reg [53:0] output_L5L6_4
+    output reg [53:0] output_L5L6_4,
+    
+    output reg wr_en_mem00,
+    output reg wr_en_mem01,
+    output reg wr_en_mem02,
+    output reg wr_en_mem03,
+    output reg wr_en_mem04,
+    output reg wr_en_mem05,
+    output reg wr_en_mem06,
+    output reg wr_en_mem07,
+    output reg wr_en_mem08,
+    output reg wr_en_mem09,
+    output reg wr_en_mem10,
+    output reg wr_en_mem11
 
 );
     reg [3:0] memory_addr;
@@ -51,7 +64,7 @@ module mem_readin_top(
     reg valid;
     
     //wr_en (write enables for the 12 memories) & write_addr (write addresses for the 12 memories) & item counter for each memory   
-    reg wr_en_mem00, wr_en_mem01, wr_en_mem02, wr_en_mem03, wr_en_mem04, wr_en_mem05, wr_en_mem06, wr_en_mem07, wr_en_mem08, wr_en_mem09, wr_en_mem10, wr_en_mem11;
+    //reg wr_en_mem00, wr_en_mem01, wr_en_mem02, wr_en_mem03, wr_en_mem04, wr_en_mem05, wr_en_mem06, wr_en_mem07, wr_en_mem08, wr_en_mem09, wr_en_mem10, wr_en_mem11;
     reg [4:0] write_addr00, write_addr01, write_addr02, write_addr03, write_addr04, write_addr05, write_addr06, write_addr07, write_addr08, write_addr09, write_addr10, write_addr11;
     reg [5:0] num_items00, num_items01, num_items02, num_items03, num_items04, num_items05, num_items06, num_items07, num_items08, num_items09, num_items10, num_items11;
     
